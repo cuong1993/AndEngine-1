@@ -1,4 +1,4 @@
 AndEngine
 =========
 
-Kho chứa các project được xây dựng AndEngine, thực hiện bởi z.k.
+Kho chứa các project được xây dựng bằng AndEngine, thực hiện bởi z.k.
