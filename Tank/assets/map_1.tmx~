@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="20" height="15" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="earth_ground" tilewidth="32" tileheight="32">
+  <image source="../../../tilesets/earth_ground.png" width="1024" height="1024"/>
+ </tileset>
+ <tileset firstgid="1025" name="map_tiles_2_1" tilewidth="32" tileheight="32">
+  <image source="../../../tilesets/map_tiles_2_1.png" width="512" height="256"/>
+ </tileset>
+ <tileset firstgid="1153" name="map_tiles_2_8" tilewidth="32" tileheight="32">
+  <image source="../../../tilesets/map_tiles_2_8.png" width="512" height="224"/>
+ </tileset>
+ <tileset firstgid="1265" name="vatcan" tilewidth="32" tileheight="32">
+  <image source="../../../tilesets/vatcan.png" width="32" height="32"/>
+ </tileset>
+ <layer name="Wall" width="20" height="15" visible="0">
+  <properties>
+   <property name="wall" value="wall"/>
+  </properties>
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA2NgGD7gIwsEU9tMYuyAiSNjQuZR072D1SxKzSMU3oT46PFBKG6IUTfUwGCKT0rNAwBLxi4osAQAAA==
+  </data>
+ </layer>
+ <layer name="Background" width="20" height="15">
+  <properties>
+   <property name="type" value="BACKGROUND"/>
+  </properties>
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA3XSOSxEQRjA8XkkRInemThKNDTOBDUSR4IgQdCzShLEuprnaHddcexqFrVlJWjXe5QkJOgdlf+LmZj3PMUvM/PNfN/ON29DhhBhbKJSCFGFduYd6EQXFoktYRkrPvtb2MYOzhDHuXOGs50YZz6BACZxSCyCKI589i+QwCWK2C9GCUzWq9K68bNWsTVtrcecc/nkFqAQjWhCM2LsHUvO+ZjxGzuRc1POT7Wxjtx6NGAQQxgWf383Kd1quU5tC7Y844x95PZjADOYxZxw30XVtj01buVc1Ve/PUX+NLaxg13xexfLcPd+ouWrut6eQ+SHkcClcL+z3reqr+qYMu7t+YwacTzhWbjfXu9bv5P1z/dw9h6o8Yg05unau3u/ifedTJ83NJCCVOQgF3nybEzL1e/m/c+sanuZyEI2qlGDWnk26elD9a7ulPR5jzKUowIt9NyKNs/3tbV8PZb0iXWT24NezLMOYgEZrEcwqo1juMI1bmDBxh3uEcAiuUtYxh72cYBSpz6C2riAF7ziDe/4wCe+sIFDciOI4htuaddYsAQAAA==
+  </data>
+ </layer>
+ <objectgroup name="Rock" width="20" height="15">
+  <properties>
+   <property name="type" value="ROCK"/>
+  </properties>
+  <object x="288" y="384" width="64" height="32"/>
+  <object x="288" y="416" width="64" height="64"/>
+  <object x="64" y="128" width="160" height="32"/>
+  <object x="64" y="288" width="160" height="32"/>
+  <object x="256" y="256" width="64" height="64"/>
+  <object x="576" y="256" width="64" height="64"/>
+  <object x="352" y="64">
+   <polyline points="0,0 64,0 64,96 32,96 32,32 0,32 0,0"/>
+  </object>
+  <object x="512" y="96">
+   <polyline points="0,0 64,0 64,32 32,32 32,64 0,64 0,96 -32,96 -32,160 0,160 0,192 32,192 32,224 -32,224 -32,192 -64,192 -64,160 -96,160 -96,96 -64,96 -64,64 -32,64 -32,32 0,32 0,0"/>
+  </object>
+  <object x="0" y="352">
+   <polyline points="0,0 64,0 64,32 96,32 96,128 0,128 0,0"/>
+  </object>
+  <object x="640" y="352">
+   <polyline points="0,0 -32,0 -32,96 -64,96 -64,128 0,128 0,0"/>
+  </object>
+  <object x="544" y="352">
+   <polyline points="0,0 0,64 -32,64 -32,0 0,0"/>
+  </object>
+ </objectgroup>
+ <layer name="Rock" width="20" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA2NgGD6AhwWCqW0mMXbAxJExIfOo6d7Bahal5hEKb0J89PggFDfEqKMEUGouPj+SYyc55pHiVmqZBzMDAPhWs1awBAAA
+  </data>
+ </layer>
+ <objectgroup name="Bush" width="20" height="15">
+  <properties>
+   <property name="type" value="BUSH"/>
+  </properties>
+  <object x="160" y="160">
+   <polyline points="0,0 0,32 -32,32 -32,64 -64,64 -64,96 -96,96 -96,128 -32,128 -32,96 0,96 0,64 32,64 32,32 64,32 64,0 0,0"/>
+  </object>
+  <object x="352" y="96">
+   <polyline points="0,0 0,224 64,224 64,64 32,64 32,0 0,0"/>
+  </object>
+  <object x="192" y="320">
+   <polyline points="0,0 0,64 -32,64 -32,160 -96,160 -96,64 -128,64 -128,0 0,0"/>
+  </object>
+ </objectgroup>
+ <layer name="Bush" width="20" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA2NgGAW4gC/L4DDPjwWCsZmHTZwcs8gxD59ZpJpHyCxy3EcIkGIeSC0ypobd1DQPZuZAhQ+9zAMA8Eh2VrAEAAA=
+  </data>
+ </layer>
+ <layer name="Wonder" width="20" height="15">
+  <properties>
+   <property name="type" value="wonder"/>
+  </properties>
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA2NgGAWjYBSMAuLBURYGhmMs1DPvKtCsa0SaBwAMpQiAsAQAAA==
+  </data>
+ </layer>
+</map>
