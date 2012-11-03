@@ -24,7 +24,6 @@ import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
 import android.opengl.GLES20;
-import android.util.Log;
 
 import com.zk.lastexam.constant.Direction;
 import com.zk.lastexam.entitys.Player;
@@ -39,7 +38,7 @@ public class GameScreen extends SimpleBaseGameActivity implements TankConstants 
 	private HUD mHUD;
 	private Scene mScene;
 	
-	private static int LAYER_COUNT = 3;
+	private static int LAYER_COUNT = 4;
 	
 	// Các thành phần để dựng hình người chơi
 	private BitmapTextureAtlas tankAtlas;
@@ -93,25 +92,26 @@ public class GameScreen extends SimpleBaseGameActivity implements TankConstants 
 		for (int i = 0; i < LAYER_COUNT; i++)
 			mScene.attachChild(new Entity());
 		
+		// Tạo vị trí khởi đầu ở giữa màn hình
+		float pX = (CAMERA_WIDTH - tankRegion.getWidth()) / 2;
+		float pY = (CAMERA_HEIGHT - tankRegion.getHeight()) / 2;
+		
 		// Tạo 1 phông nền màu trắng
 		mScene.setBackground(new Background(1, 1, 1));
 		
 		try {
-			final TMXLoader mapLoader = new TMXLoader(getAssets(), getTextureManager(), getVertexBufferObjectManager());
-			tiledMap = mapLoader.loadFromAsset("map_1.tmx");
+			final TMXLoader mapLoader = new TMXLoader(this.getAssets(), this.mEngine.getTextureManager(), TextureOptions.BILINEAR_PREMULTIPLYALPHA, this.getVertexBufferObjectManager());
+			tiledMap = mapLoader.loadFromAsset("tmx/map_2.tmx");
 		} catch (TMXLoadException e) {
 			e.printStackTrace();
 		}
 		
 		for (TMXLayer layer : this.tiledMap.getTMXLayers())
 			mScene.getChildByIndex(LAYER_MAP).attachChild(layer);
-		
-		// Tạo vị trí khởi đầu cho player (giữa màn hình)
-		float pX = (CAMERA_WIDTH - tankRegion.getWidth()) / 2;
-		float pY = (CAMERA_HEIGHT - tankRegion.getHeight()) / 2;
+		mScene.getChildByIndex(LAYER_MAP).setPosition(80, 0);
 		
 		// Xây dựng 1 đối tượng Player
-		player = new Player(pX, pY, tankRegion, getVertexBufferObjectManager());
+		this.player = new Player(pX, pY, tankRegion, getVertexBufferObjectManager());
 		
 		// Thu nhỏ đối tượng về độ phân giải (32x32)
 		player.setScale(0.5f);
@@ -129,7 +129,6 @@ public class GameScreen extends SimpleBaseGameActivity implements TankConstants 
 			 */
 			@Override
 			public void onControlChange(final BaseOnScreenControl pBaseOnScreenControl, final float pValueX, final float pValueY) {
-				Log.d("Control values", "X" + pValueX + "; Y: " + pValueY);
 				// Cần điều khiển đẩy sang phải, đổi hướng player về phía phải, thay đổi giá trị vận tốc trục X
 				if(pValueX == 1) {
 					GameScreen.this.player.setDirection(Direction.RIGHT);
