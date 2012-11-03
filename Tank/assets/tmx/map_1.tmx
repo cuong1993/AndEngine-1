@@ -1,25 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="20" height="15" tilewidth="32" tileheight="32">
  <tileset firstgid="1" name="earth_ground" tilewidth="32" tileheight="32">
-  <image source="../../../tilesets/earth_ground.png" width="1024" height="1024"/>
+  <image source="../tilesets/earth_ground.png" width="1024" height="1024"/>
  </tileset>
  <tileset firstgid="1025" name="map_tiles_2_1" tilewidth="32" tileheight="32">
-  <image source="../../../tilesets/map_tiles_2_1.png" width="512" height="256"/>
+  <image source="../tilesets/map_tiles_2_1.png" width="512" height="256"/>
  </tileset>
  <tileset firstgid="1153" name="map_tiles_2_8" tilewidth="32" tileheight="32">
-  <image source="../../../tilesets/map_tiles_2_8.png" width="512" height="224"/>
+  <image source="../tilesets/map_tiles_2_8.png" width="512" height="224"/>
  </tileset>
  <tileset firstgid="1265" name="vatcan" tilewidth="32" tileheight="32">
-  <image source="../../../tilesets/vatcan.png" width="32" height="32"/>
- </tileset>
- <layer name="Wall" width="20" height="15" visible="0">
   <properties>
-   <property name="wall" value="wall"/>
+   <property name="type" value="WALL"/>
   </properties>
-  <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA2NgGD7gIwsEU9tMYuyAiSNjQuZR072D1SxKzSMU3oT46PFBKG6IUTfUwGCKT0rNAwBLxi4osAQAAA==
-  </data>
- </layer>
+  <image source="../tilesets/vatcan.png" width="32" height="32"/>
+ </tileset>
  <layer name="Background" width="20" height="15">
   <properties>
    <property name="type" value="BACKGROUND"/>
