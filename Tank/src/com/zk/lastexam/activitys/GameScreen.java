@@ -92,26 +92,24 @@ public class GameScreen extends SimpleBaseGameActivity implements TankConstants 
 		for (int i = 0; i < LAYER_COUNT; i++)
 			mScene.attachChild(new Entity());
 		
-		// Tạo vị trí khởi đầu ở giữa màn hình
-		float pX = (CAMERA_WIDTH - tankRegion.getWidth()) / 2;
-		float pY = (CAMERA_HEIGHT - tankRegion.getHeight()) / 2;
-		
 		// Tạo 1 phông nền màu trắng
 		mScene.setBackground(new Background(1, 1, 1));
 		
+		// Tải tile map vào bộ nhớ
 		try {
 			final TMXLoader mapLoader = new TMXLoader(this.getAssets(), this.mEngine.getTextureManager(), TextureOptions.BILINEAR_PREMULTIPLYALPHA, this.getVertexBufferObjectManager());
-			tiledMap = mapLoader.loadFromAsset("tmx/map_2.tmx");
+			tiledMap = mapLoader.loadFromAsset("tmx/maps_3.tmx");
 		} catch (TMXLoadException e) {
 			e.printStackTrace();
 		}
 		
+		// Đẩy tile map lên màn hình
 		for (TMXLayer layer : this.tiledMap.getTMXLayers())
 			mScene.getChildByIndex(LAYER_MAP).attachChild(layer);
 		mScene.getChildByIndex(LAYER_MAP).setPosition(80, 0);
 		
 		// Xây dựng 1 đối tượng Player
-		this.player = new Player(pX, pY, tankRegion, getVertexBufferObjectManager());
+		this.player = new Player(TILED_WIDHT * 10, TILED_HEIGHT *13, tankRegion, getVertexBufferObjectManager());
 		
 		// Thu nhỏ đối tượng về độ phân giải (32x32)
 		player.setScale(0.5f);
