@@ -1,89 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="20" height="15" tilewidth="32" tileheight="32">
- <tileset firstgid="1" name="earth_ground" tilewidth="32" tileheight="32">
-  <image source="../tilesets/earth_ground.png" width="1024" height="1024"/>
+ <properties>
+  <property name="level" value="1"/>
+ </properties>
+ <tileset firstgid="1" name="tank_tile_set" tilewidth="32" tileheight="32">
+  <image source="tilesets/tank_tile_set.png" width="1024" height="1024"/>
  </tileset>
- <tileset firstgid="1025" name="map_tiles_2_1" tilewidth="32" tileheight="32">
-  <image source="../tilesets/map_tiles_2_1.png" width="512" height="256"/>
- </tileset>
- <tileset firstgid="1153" name="map_tiles_2_8" tilewidth="32" tileheight="32">
-  <image source="../tilesets/map_tiles_2_8.png" width="512" height="224"/>
- </tileset>
- <layer name="Wall" width="20" height="15" visible="0">
-  <properties>
-   <property name="wall" value="wall"/>
-  </properties>
+ <layer name="background" width="20" height="15">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC2NgGAWjYBSMgqEBAGlKTgywBAAA
+   H4sIAAAAAAAAA5XSSS9DURTA8ds2aZuI+RMgQSLmT4AEG0PwBZCYV/gCSAyttjaGrZZW0NbGsNXSmraGLRLz9BH8b6rp69VXkbxf3j3vnnNyT951G4TwYA3rKBdCVKASVXDACRcW8I4PfOJLJOq88CGEMI5wjBZyWtGGdvgRQBA7yCQnC9nI0dRFEMUoOWMYxyLxEpaxYkiO9dYyrxo1qIWZPhZYsUu8h30cGJJjvbXM4xFGmFCMEpTi8o9z6K0LqC1EERrRhOYU86rn0O5pv9dRW48G9KEfA8q8src87xWucfPTJ95D+72b2h70YhozmBXJ9elmVfcmqJ3EFLzwYUOZV51V7z/JeJVaNzyIIIoTZV51Vu1a3TukNoQwHvCIpzTzpruXMr6l9g73MBNbYP3Hfft1/2CECR307ESXcj69dap5c5GHfNhgxzwcGKbvCE5xhnNciNh+Bu9BDIlEXrzOCRc2sYVt+GVvmYNnvOAVbyK2X8Z7DjaRyIvXBRDEN9foDnOwBAAA
   </data>
  </layer>
- <layer name="Background" width="20" height="15">
-  <properties>
-   <property name="type" value="BACKGROUND"/>
-  </properties>
-  <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC3XSOSxEQRjA8XkkRInemThKNDTOBDUSR4IgQdCzShLEuprnaHddcexqFrVlJWjXe5QkJOgdlf+LmZj3PMUvM/PNfN/ON29DhhBhbKJSCFGFduYd6EQXFoktYRkrPvtb2MYOzhDHuXOGs50YZz6BACZxSCyCKI589i+QwCWK2C9GCUzWq9K68bNWsTVtrcecc/nkFqAQjWhCM2LsHUvO+ZjxGzuRc1POT7Wxjtx6NGAQQxgWf383Kd1quU5tC7Y844x95PZjADOYxZxw30XVtj01buVc1Ve/PUX+NLaxg13xexfLcPd+ouWrut6eQ+SHkcClcL+z3reqr+qYMu7t+YwacTzhWbjfXu9bv5P1z/dw9h6o8Yg05unau3u/ifedTJ83NJCCVOQgF3nybEzL1e/m/c+sanuZyEI2qlGDWnk26elD9a7ulPR5jzKUowIt9NyKNs/3tbV8PZb0iXWT24NezLMOYgEZrEcwqo1juMI1bmDBxh3uEcAiuUtYxh72cYBSpz6C2riAF7ziDe/4wCe+sIFDciOI4htuaddYsAQAAA==
-  </data>
- </layer>
- <objectgroup name="Rock" width="20" height="15">
+ <objectgroup name="rock" width="20" height="15">
   <properties>
    <property name="type" value="ROCK"/>
   </properties>
+  <object x="288" y="64">
+   <polyline points="0,0 96,0 96,64 64,64 64,32 0,32 0,0"/>
+  </object>
+  <object x="32" y="128" width="160" height="32"/>
+  <object x="224" y="256" width="64" height="64"/>
+  <object x="32" y="288" width="160" height="32"/>
   <object x="288" y="384" width="64" height="32"/>
-  <object x="288" y="416" width="64" height="64"/>
-  <object x="64" y="128" width="160" height="32"/>
-  <object x="64" y="288" width="160" height="32"/>
-  <object x="256" y="256" width="64" height="64"/>
   <object x="576" y="256" width="64" height="64"/>
-  <object x="352" y="64">
-   <polyline points="0,0 64,0 64,96 32,96 32,32 0,32 0,0"/>
+  <object x="576" y="384" width="64" height="96"/>
+  <object x="384" y="192">
+   <polyline points="0,0 32,0 32,-32 64,-32 64,-64 96,-64 96,-96 160,-96 160,-64 128,-64 128,-32 96,-32 96,0 64,0 64,32 0,32 0,0"/>
   </object>
-  <object x="512" y="96">
-   <polyline points="0,0 64,0 64,32 32,32 32,64 0,64 0,96 -32,96 -32,160 0,160 0,192 32,192 32,224 -32,224 -32,192 -64,192 -64,160 -96,160 -96,96 -64,96 -64,64 -32,64 -32,32 0,32 0,0"/>
+  <object x="384" y="256">
+   <polyline points="0,0 64,0 64,32 96,32 96,64 0,64 0,0"/>
   </object>
-  <object x="0" y="352">
-   <polyline points="0,0 64,0 64,32 96,32 96,128 0,128 0,0"/>
-  </object>
-  <object x="640" y="352">
-   <polyline points="0,0 -32,0 -32,96 -64,96 -64,128 0,128 0,0"/>
-  </object>
-  <object x="544" y="352">
-   <polyline points="0,0 0,64 -32,64 -32,0 0,0"/>
+  <object x="0" y="384">
+   <polyline points="0,0 32,0 32,32 64,32 64,64 96,64 96,96 0,96 0,0"/>
   </object>
  </objectgroup>
- <layer name="Rock" width="20" height="15">
+ <layer name="rock" width="20" height="15">
+  <properties>
+   <property name="type" value="ROCK"/>
+  </properties>
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC2NgGD6AhwWCqW0mMXbAxJExIfOo6d7Bahal5hEKb0J89PggFDfEqKMEUGouPj+SYyc55pHiVmqZBzMDAPhWs1awBAAA
+   H4sIAAAAAAAAA5vNyMAwe4jjP0iY2uZiswef/cS6g5ruHaxm0cIthOIAX3zgM49YewYbplZaIzX9EmsntcyEmQEAk0W7NbAEAAA=
   </data>
  </layer>
- <objectgroup name="Bush" width="20" height="15">
+ <objectgroup name="bush" width="20" height="15">
   <properties>
-   <property name="type" value="BUSH"/>
+   <property name="type" value="B"/>
   </properties>
-  <object x="160" y="160">
+  <object x="128" y="160">
    <polyline points="0,0 0,32 -32,32 -32,64 -64,64 -64,96 -96,96 -96,128 -32,128 -32,96 0,96 0,64 32,64 32,32 64,32 64,0 0,0"/>
   </object>
-  <object x="352" y="96">
-   <polyline points="0,0 0,224 64,224 64,64 32,64 32,0 0,0"/>
+  <object x="320" y="96">
+   <polyline points="0,0 0,224 64,224 64,160 128,160 128,192 160,192 160,224 224,224 224,192 192,192 192,160 160,160 160,128 64,128 64,32 32,32 32,0 0,0"/>
   </object>
-  <object x="192" y="320">
-   <polyline points="0,0 0,64 -32,64 -32,160 -96,160 -96,64 -128,64 -128,0 0,0"/>
-  </object>
-  <object x="62" y="350">
-   <polygon points="0,0 -61,0 -62,-29 1,-29"/>
+  <object x="0" y="320">
+   <polyline points="0,0 192,0 192,32 160,32 160,64 128,64 128,96 96,96 96,128 64,128 64,96 32,96 32,64 0,64 0,0"/>
   </object>
  </objectgroup>
- <layer name="Bush" width="20" height="15">
+ <layer name="bush" width="20" height="15">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC2NgGAW4gC/L4DDPjwWCsZmHTZwcs8gxD59ZpJpHyCxy3EcIEGMeSA02TA27qWkezEx6hw+9zQMAvvUPTbAEAAA=
+   H4sIAAAAAAAAA5vNyMAwexRj4Fgm6ppXCzQvjgwzY3HoA5lXR6J5ILNqcegh1Tx8ZiGbB3I7Lj8QaxY295Ebnvj8i81MmDp0mlJ7a6lgFrKZ1DIL2UxqmUVNDABjR6L7sAQAAA==
   </data>
  </layer>
- <layer name="Wonder" width="20" height="15">
+ <objectgroup name="wonder" width="20" height="15">
   <properties>
-   <property name="type" value="wonder"/>
+   <property name="type" value="WONDER"/>
   </properties>
+  <object x="288" y="416" width="64" height="64"/>
+ </objectgroup>
+ <layer name="wonder" width="20" height="15">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC2NgGAWjYBSMAuLBURYGhmMs1DPvKtCsa0SaBwAMpQiAsAQAAA==
+   H4sIAAAAAAAAA5vNyMAwexSP4lE8ionEpcwMDGXM1DNvKtCsaUSaBwBrtIRdsAQAAA==
   </data>
  </layer>
 </map>
