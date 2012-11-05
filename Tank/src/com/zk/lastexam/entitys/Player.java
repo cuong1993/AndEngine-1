@@ -43,22 +43,22 @@ public class Player extends Tank {
 		this.direction = outOfBound();
 		
 		if (this.direction == Direction.RIGHT) {
-			this.setRotation(90);
+			changeRotation(this.direction);
 			this.physicsHandler.setVelocity(velocityX, 0);
 		}
 		
 		if (this.direction == Direction.DOWN) {
-			this.setRotation(180);
+			changeRotation(this.direction);
 			this.physicsHandler.setVelocity(0, velocityY);
 		}
 		
 		if (this.direction == Direction.LEFT) {
-			this.setRotation(270);
+			changeRotation(this.direction);
 			this.physicsHandler.setVelocity(velocityX, 0);
 		}
 		
 		if (this.direction == Direction.UP) {
-			this.setRotation(0);
+			changeRotation(this.direction);
 			this.physicsHandler.setVelocity(0, velocityY);
 		}
 		
@@ -70,7 +70,7 @@ public class Player extends Tank {
 	/**
 	 * Phương thức mô tả trạng thái vượt giới hạn vùng biên.
 	 * 
-	 * @return {@link Direction} bằng NONE nếu đối tượng ra khỏi vùng biên.
+	 * @return {@link Direction} = NONE nếu đối tượng ra khỏi vùng biên.
 	 */
 	@Override
 	public Direction outOfBound() {
@@ -78,8 +78,10 @@ public class Player extends Tank {
 			this.getX() + this.getWidth() >= 800 && this.direction == Direction.RIGHT ||
 			this.getY() <= 0 && this.direction == Direction.UP ||
 			this.getY() + this.getHeight() >= 480 && this.direction == Direction.DOWN)
-			
+		{
+			changeRotation(this.direction);
 			return Direction.NONE;
+		}
 		else
 			return this.direction;
 	}
@@ -115,5 +117,29 @@ public class Player extends Tank {
 
 	public void setVelocityY(float velocityY) {
 		this.velocityY = velocityY;
+	}
+	
+	/**
+	 * Phương thức thay đổi hướng của đối tượng {@link Tank}
+	 * 
+	 * @param direction {@link Direction} của đối tượng
+	 */
+	public void changeRotation(Direction direction) {
+		switch (direction) {
+		case UP:
+			this.setRotation(0);
+			break;
+		case RIGHT:
+			this.setRotation(90);
+			break;
+		case DOWN:
+			this.setRotation(180);
+			break;
+		case LEFT:
+			this.setRotation(270);
+			break;
+		default:
+			break;
+		}
 	}
 }

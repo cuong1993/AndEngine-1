@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="20" height="15" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="tank_tile_set" tilewidth="32" tileheight="32">
+  <image source="tilesets/tank_tile_set.png" width="1024" height="1024"/>
+  <tile id="507">
+   <properties>
+    <property name="type" value="ROCK"/>
+   </properties>
+  </tile>
+  <tile id="636">
+   <properties>
+    <property name="type" value="BUSH"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="background" width="20" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC5vJyMAwcwBwLRMqpoZ5IPoPFGOzixxz0c2j1L3I5lHD7zDz8Jn1hwDGFS/E2B/HhIlJdR8us8gNP0LuITV+SQk/aqe/UYyKAYW3hDiwBAAA
+  </data>
+ </layer>
+</map>
