@@ -24,7 +24,6 @@ import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
 import android.opengl.GLES20;
-
 import com.zk.lastexam.constant.Direction;
 import com.zk.lastexam.entitys.Player;
 import com.zk.lastexam.interfaces.TankConstants;
@@ -51,6 +50,7 @@ public class GameScreen extends SimpleBaseGameActivity implements TankConstants 
 	private ITextureRegion mOnScreenControlKnobTextureRegion;
 
 	private TMXTiledMap tiledMap;
+	private int[] rocks = new int[50];
 	
 	/**
 	 * Phương thức tạo EngineOptions
@@ -98,15 +98,23 @@ public class GameScreen extends SimpleBaseGameActivity implements TankConstants 
 		// Tải tile map vào bộ nhớ
 		try {
 			final TMXLoader mapLoader = new TMXLoader(this.getAssets(), this.mEngine.getTextureManager(), TextureOptions.BILINEAR_PREMULTIPLYALPHA, this.getVertexBufferObjectManager());
-			tiledMap = mapLoader.loadFromAsset("tmx/test.tmx");
+
+			tiledMap = mapLoader.loadFromAsset("tmx/map_1.tmx");
 		} catch (TMXLoadException e) {
 			e.printStackTrace();
 		}
 		
 		// Đẩy tile map lên màn hình
-		for (TMXLayer layer : this.tiledMap.getTMXLayers())
-			mScene.getChildByIndex(LAYER_MAP).attachChild(layer);
+		for (TMXLayer layer : this.tiledMap.getTMXLayers()) {
+			// Nếu layer có tên bush thì dựng nó bên trên layer TANK
+			if (layer.getName().equals("bush"))
+				mScene.getChildByIndex(LAYER_BUSH).attachChild(layer);
+			else
+				mScene.getChildByIndex(LAYER_MAP).attachChild(layer);
+		}
+		// Đặt tile map vào giữa màn hình
 		mScene.getChildByIndex(LAYER_MAP).setPosition(80, 0);
+		mScene.getChildByIndex(LAYER_BUSH).setPosition(80, 0);
 		
 		// Xây dựng 1 đối tượng Player
 		this.player = new Player(TILED_WIDHT * 10, TILED_HEIGHT *13, tankRegion, getVertexBufferObjectManager());
@@ -116,7 +124,6 @@ public class GameScreen extends SimpleBaseGameActivity implements TankConstants 
 		
 		// Đặt đối tượng lên màn hình
 		mScene.getChildByIndex(LAYER_TANK).attachChild(player);
-		
 		// Tạo cần điều khiển
 		final DigitalOnScreenControl analogOnScreenControl = new DigitalOnScreenControl(0, CAMERA_HEIGHT - this.mOnScreenControlBaseTextureRegion.getHeight(), 
 				this.mCamera, this.mOnScreenControlBaseTextureRegion, this.mOnScreenControlKnobTextureRegion, 0.1f, this.getVertexBufferObjectManager(), 

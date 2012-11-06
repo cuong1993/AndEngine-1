@@ -29,15 +29,19 @@ public interface TankConstants {
 	public static final int TILED_HEIGHT = 32;
 	
 	/**
-	 * Lớp hình ảnh nền được dựng lên màn hình (0)
+	 * Lớp hình ảnh nền trên màn hình (0)
 	 */
 	public static final int LAYER_BACKGROUND = 0;
 	/**
-	 * Lớp hình ảnh bản đồ được dựng lên màn hình (1)
+	 * Lớp hình ảnh bản đồ trên màn hình (1)
 	 */
 	public static final int LAYER_MAP = LAYER_BACKGROUND + 1;
 	/**
 	 * Lớp hình ảnh các đối tượng {@link Tank} (2)
 	 */
 	public static final int LAYER_TANK = LAYER_MAP + 1;
+	/**
+	 * Lớp hình ảnh bụi cây trên màn hình (3)
+	 */
+	public static final int LAYER_BUSH = LAYER_TANK + 1;
 }
