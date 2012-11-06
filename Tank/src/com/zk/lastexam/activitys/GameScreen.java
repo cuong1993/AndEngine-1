@@ -1,5 +1,7 @@
 package com.zk.lastexam.activitys;
 
+import java.util.ArrayList;
+
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl;
@@ -14,6 +16,9 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.extension.tmx.TMXLayer;
 import org.andengine.extension.tmx.TMXLoader;
+import org.andengine.extension.tmx.TMXProperties;
+import org.andengine.extension.tmx.TMXTile;
+import org.andengine.extension.tmx.TMXTileProperty;
 import org.andengine.extension.tmx.TMXTiledMap;
 import org.andengine.extension.tmx.util.exception.TMXLoadException;
 import org.andengine.opengl.texture.TextureOptions;
@@ -23,6 +28,7 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
+import android.graphics.Rect;
 import android.opengl.GLES20;
 import com.zk.lastexam.constant.Direction;
 import com.zk.lastexam.entitys.Player;
@@ -50,7 +56,7 @@ public class GameScreen extends SimpleBaseGameActivity implements TankConstants 
 	private ITextureRegion mOnScreenControlKnobTextureRegion;
 
 	private TMXTiledMap tiledMap;
-	private int[] rocks = new int[50];
+	private ArrayList<Rect> rocks = new ArrayList<Rect>();
 	
 	/**
 	 * Phương thức tạo EngineOptions
@@ -97,7 +103,15 @@ public class GameScreen extends SimpleBaseGameActivity implements TankConstants 
 		
 		// Tải tile map vào bộ nhớ
 		try {
-			final TMXLoader mapLoader = new TMXLoader(this.getAssets(), this.mEngine.getTextureManager(), TextureOptions.BILINEAR_PREMULTIPLYALPHA, this.getVertexBufferObjectManager());
+			final TMXLoader mapLoader = new TMXLoader(this.getAssets(), this.mEngine.getTextureManager(), TextureOptions.BILINEAR_PREMULTIPLYALPHA, this.getVertexBufferObjectManager(), new TMXLoader.ITMXTilePropertiesListener() {
+				
+				@Override
+				public void onTMXTileWithPropertiesCreated(TMXTiledMap arg0, TMXLayer arg1,
+						TMXTile arg2, TMXProperties<TMXTileProperty> arg3) {
+					if (arg3.containsTMXProperty("type", "ROCK") || arg3.containsTMXProperty("type", "WONDER"))
+						rocks.add(new Rect(arg2.getTileX(), arg2.getTileY(), arg2.getTileX() + TILED_WIDHT, arg2.getTileY() + TILED_HEIGHT));
+				}
+			});
 
 			tiledMap = mapLoader.loadFromAsset("tmx/map_1.tmx");
 		} catch (TMXLoadException e) {
@@ -134,10 +148,18 @@ public class GameScreen extends SimpleBaseGameActivity implements TankConstants 
 			 */
 			@Override
 			public void onControlChange(final BaseOnScreenControl pBaseOnScreenControl, final float pValueX, final float pValueY) {
+				
 				// Cần điều khiển đẩy sang phải, đổi hướng player về phía phải, thay đổi giá trị vận tốc trục X
 				if(pValueX == 1) {
-					GameScreen.this.player.setDirection(Direction.RIGHT);
-					GameScreen.this.player.setVelocityX(pValueX * 100);
+					if (hitRock(GameScreen.this.player.getX(), GameScreen.this.player.getY(), Direction.RIGHT)){
+						GameScreen.this.player.setDirection(Direction.NONE);
+					}
+
+					else {
+						GameScreen.this.player.setDirection(Direction.RIGHT);
+						GameScreen.this.player.setVelocityX(pValueX * 100);
+					}
+					
 					GameScreen.this.player.move();
 				} 
 				
@@ -189,5 +211,52 @@ public class GameScreen extends SimpleBaseGameActivity implements TankConstants 
 		mHUD = new HUD();
 		
 		mCamera.setHUD(mHUD);
+	}	
+	/**
+	 * Phương thức kiểm tra hướng di chuyển tiếp theo có được phép
+	 * 
+	 * @param pX Tọa độ X hiện tại
+	 * @param pY Tọa độ Y hiện tại
+	 * @param direction {@link Direction} sẽ chuyển.
+	 * @return true nếu chuyển hướng và va vào, false nếu ngược lại
+	 */
+	public boolean hitRock(float pX, float pY, Direction direction) {
+		boolean isHit = false;
+		int altpX;
+		int altpY;
+		for (Rect rock : rocks) {
+			
+			// Xử lý khi nhận hướng sang phải
+			if (direction == Direction.RIGHT) {
+				altpX = (int)pX + TILED_WIDHT;
+				altpY = (int)pY + TILED_HEIGHT;
+				isHit = rock.contains(altpX, (int)pY) || rock.contains(altpX, altpY);
+			}
+
+			// Xử lý khi nhận hướng lên trên
+			if (direction == Direction.UP) {
+				altpX = (int)pX - TILED_WIDHT;
+				altpY = (int)pY - TILED_HEIGHT;
+				isHit = rock.contains((int)pX, altpY) || rock.contains(altpX, altpY);
+			}
+
+			// Xử lý khi nhận hướng xuống dưới
+			if (direction == Direction.DOWN) {
+				altpX = (int)pX + TILED_WIDHT;
+				altpY = (int)pY + TILED_HEIGHT;
+				isHit = rock.contains((int)pX, altpY) || rock.contains(altpX, altpY);
+			}
+
+			// Xử lý khi nhận hướng sang trái
+			if (direction == Direction.LEFT) {
+				altpX = (int)pX - TILED_WIDHT;
+				altpY = (int)pY - TILED_HEIGHT;
+				pX = pX - TILED_WIDHT;
+				isHit = rock.contains(altpX, (int)pY) || rock.contains(altpX, altpY);
+			}
+		}
+		
+		// Trả kết quả
+		return isHit;
 	}
 }
