@@ -50,6 +50,7 @@ public class GameScreen extends SimpleBaseGameActivity implements TankConstants 
 	private ITextureRegion mOnScreenControlKnobTextureRegion;
 
 	private TMXTiledMap tiledMap;
+	private int[] rocks = new int[50];
 	
 	/**
 	 * Phương thức tạo EngineOptions
