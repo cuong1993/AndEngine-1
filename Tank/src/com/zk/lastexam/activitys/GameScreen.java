@@ -98,7 +98,7 @@ public class GameScreen extends SimpleBaseGameActivity implements TankConstants 
 		// Tải tile map vào bộ nhớ
 		try {
 			final TMXLoader mapLoader = new TMXLoader(this.getAssets(), this.mEngine.getTextureManager(), TextureOptions.BILINEAR_PREMULTIPLYALPHA, this.getVertexBufferObjectManager());
-			tiledMap = mapLoader.loadFromAsset("tmx/maps_3.tmx");
+			tiledMap = mapLoader.loadFromAsset("tmx/test.tmx");
 		} catch (TMXLoadException e) {
 			e.printStackTrace();
 		}
