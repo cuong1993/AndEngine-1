@@ -3,7 +3,6 @@ package com.zk.lastexam.activitys;
 import java.util.ArrayList;
 
 import org.andengine.engine.camera.Camera;
-import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl;
 import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl.IAnalogOnScreenControlListener;
 import org.andengine.engine.camera.hud.controls.BaseOnScreenControl;
@@ -14,6 +13,7 @@ import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.Entity;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.tmx.TMXLayer;
 import org.andengine.extension.tmx.TMXLoader;
 import org.andengine.extension.tmx.TMXProperties;
@@ -21,10 +21,12 @@ import org.andengine.extension.tmx.TMXTile;
 import org.andengine.extension.tmx.TMXTileProperty;
 import org.andengine.extension.tmx.TMXTiledMap;
 import org.andengine.extension.tmx.util.exception.TMXLoadException;
+import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
@@ -40,7 +42,6 @@ public class GameScreen extends SimpleBaseGameActivity implements TankConstants 
 	private static final int CAMERA_HEIGHT = 480;
 	
 	private Camera mCamera;
-	private HUD mHUD;
 	private Scene mScene;
 	
 	private static int LAYER_COUNT = 4;
@@ -54,6 +55,10 @@ public class GameScreen extends SimpleBaseGameActivity implements TankConstants 
 	private BitmapTextureAtlas mOnScreenControlTexture;
 	private ITextureRegion mOnScreenControlBaseTextureRegion;
 	private ITextureRegion mOnScreenControlKnobTextureRegion;
+	
+	private BitmapTextureAtlas mFireAtlas;
+	private TextureRegion mFireRegion;
+	private Sprite mFire;
 
 	private TMXTiledMap tiledMap;
 	private ArrayList<Rect> rocks = new ArrayList<Rect>();
@@ -86,6 +91,11 @@ public class GameScreen extends SimpleBaseGameActivity implements TankConstants 
 		this.mOnScreenControlBaseTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mOnScreenControlTexture, this, "onscreen_control_base.png", 0, 0);
 		this.mOnScreenControlKnobTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mOnScreenControlTexture, this, "onscreen_control_knob.png", 128, 0);
 		this.mOnScreenControlTexture.load();
+		
+		// Tạo texture cho nút bắn
+		this.mFireAtlas = new BitmapTextureAtlas(this.getTextureManager(), 128, 128);
+		this.mFireRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mFireAtlas, getAssets(), "on_fire_icon.png", 0, 0);
+		this.mFireAtlas.load();
 	}
 
 	/**
@@ -108,7 +118,7 @@ public class GameScreen extends SimpleBaseGameActivity implements TankConstants 
 				@Override
 				public void onTMXTileWithPropertiesCreated(TMXTiledMap arg0, TMXLayer arg1,
 						TMXTile arg2, TMXProperties<TMXTileProperty> arg3) {
-					if (arg3.containsTMXProperty("type", "ROCK") || arg3.containsTMXProperty("type", "WONDER"))
+					if (arg3.containsTMXProperty("type", "ROCK"))
 						rocks.add(new Rect(arg2.getTileX(), arg2.getTileY(), arg2.getTileX() + TILED_WIDHT, arg2.getTileY() + TILED_HEIGHT));
 				}
 			});
@@ -204,14 +214,19 @@ public class GameScreen extends SimpleBaseGameActivity implements TankConstants 
 		// Đặt cần điều khiển lên màn hình
 		mScene.setChildScene(analogOnScreenControl);
 		
+		// 
+		mFire = new Sprite(CAMERA_WIDTH - 120, CAMERA_HEIGHT - 110, mFireRegion, getVertexBufferObjectManager()) {
+			@Override
+			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+				GameScreen.this.player.fire();
+				return true;
+			}
+		};
+		mFire.setScale(0.75f);
+		mScene.attachChild(mFire);
+		
 		return mScene;
 	}
-	
-	public void createHUD() {
-		mHUD = new HUD();
-		
-		mCamera.setHUD(mHUD);
-	}	
 	/**
 	 * Phương thức kiểm tra hướng di chuyển tiếp theo có được phép
 	 * 
@@ -230,7 +245,7 @@ public class GameScreen extends SimpleBaseGameActivity implements TankConstants 
 			if (direction == Direction.RIGHT) {
 				altpX = (int)pX + TILED_WIDHT;
 				altpY = (int)pY + TILED_HEIGHT;
-				isHit = rock.contains(altpX, (int)pY) || rock.contains(altpX, altpY);
+				isHit = rock.contains((int)pX, (int)pY) || rock.contains((int)pX, altpY);
 			}
 
 			// Xử lý khi nhận hướng lên trên
