@@ -252,7 +252,7 @@ public class GameScreen extends SimpleBaseGameActivity implements TankConstants 
 				altpX = (int)pX - TILED_WIDHT;
 				altpY = (int)pY - TILED_HEIGHT;
 				pX = pX - TILED_WIDHT;
-				isHit = rock.contains(altpX, (int)pY) || rock.contains(altpX, altpY);
+				isHit = rock.contains(altpX, altpY) || rock.contains(altpX, altpY);
 			}
 		}
 		
