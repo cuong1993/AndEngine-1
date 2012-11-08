@@ -14,6 +14,8 @@ import com.zk.lastexam.objects.Tank;
  * @since 1/11/2012
  */
 public class Player extends Tank {
+	
+	private Bullet bullet;
 
 	/**
 	 * Hàm tạo của đối tượng Player, mặc định đăng ký {@link PhysicsHandler}
