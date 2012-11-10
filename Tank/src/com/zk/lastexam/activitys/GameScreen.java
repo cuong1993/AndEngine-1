@@ -223,6 +223,7 @@ public class GameScreen extends SimpleBaseGameActivity implements TankConstants 
 			}
 		};
 		mFire.setScale(0.75f);
+		mScene.registerTouchArea(mFire);
 		mScene.attachChild(mFire);
 		
 		return mScene;
