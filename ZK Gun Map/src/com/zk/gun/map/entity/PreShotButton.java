@@ -31,7 +31,15 @@ public class PreShotButton implements IGunMap{
 		this.mSprite = new Sprite(0, 0, mRegion, mEngine.getVertexBufferObjectManager()) {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-				// Phần logic xử lý khi chạm
+				int act = pSceneTouchEvent.getAction();
+				switch (act) {
+				case TouchEvent.ACTION_DOWN:
+					this.setAlpha(128);
+					break;
+				case TouchEvent.ACTION_UP:
+					this.setAlpha(1.0f);
+					break;
+				}
 				return true;
 			}
 		};

@@ -27,9 +27,9 @@ public class ShotButton implements IGunMap {
 	private TextureRegion mRegion;
 	private Sprite mSprite;
 	
-	public ShotButton(float cameraWidth, float cameraHeight) {
-		this.pX = (int) (cameraWidth - 110);
-		this.pY = (int) (cameraWidth - 120);
+	public ShotButton(float cameraWidth) {
+		this.pX = (int) (cameraWidth - 120);
+		this.pY = 0;
 	}
 
 	@Override
@@ -45,7 +45,15 @@ public class ShotButton implements IGunMap {
 		this.mSprite = new Sprite(pX, pY, mRegion, mEngine.getVertexBufferObjectManager()) {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-				// Phần logic xử lý khi chạm
+				int act = pSceneTouchEvent.getAction();
+				switch (act) {
+				case TouchEvent.ACTION_DOWN:
+					this.setAlpha(128);
+					break;
+				case TouchEvent.ACTION_UP:
+					this.setAlpha(1.0f);
+					break;
+				}
 				return true;
 			}
 		};

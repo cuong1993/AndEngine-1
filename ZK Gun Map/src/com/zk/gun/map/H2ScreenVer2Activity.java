@@ -17,6 +17,7 @@ import org.andengine.ui.activity.SimpleBaseGameActivity;
 
 import com.zk.gun.map.entity.Azimuth;
 import com.zk.gun.map.entity.PreShotButton;
+import com.zk.gun.map.entity.RollToward;
 import com.zk.gun.map.entity.ShotButton;
 import com.zk.gun.map.handler.OrientationHandler;
 
@@ -44,6 +45,7 @@ public class H2ScreenVer2Activity extends SimpleBaseGameActivity {
 	
 	// Đối tượng Azimuth thể hiện sự thay đổi phương vị
 	private Azimuth azimuthToward;
+	private RollToward rollToward;
 	
 	private PreShotButton preShotButton;
 	private ShotButton shotButton;
@@ -60,10 +62,12 @@ public class H2ScreenVer2Activity extends SimpleBaseGameActivity {
 		// Đăng ký nhận dữ liệu từ sensor Orientation
 		orient = new OrientationHandler(this);
 		
-		preShotButton = new PreShotButton();
-		shotButton = new ShotButton(CAMERA_WIDTH, CAMERA_HEIGHT);
+		rollToward = new RollToward(CAMERA_WIDTH, CAMERA_HEIGHT);
 		
-		return new EngineOptions(true, ScreenOrientation.LANDSCAPE_SENSOR, new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT), mCamera);
+		preShotButton = new PreShotButton();
+		shotButton = new ShotButton(CAMERA_WIDTH);
+		
+		return new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED, new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT), mCamera);
 	}
 
 	/**
@@ -92,6 +96,8 @@ public class H2ScreenVer2Activity extends SimpleBaseGameActivity {
 		azimuthTowardRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(azimuthTowardAtlas, this, "azimuth_toward.png", 0, 0, 1, 1);
 		azimuthTowardAtlas.load();
 		
+		rollToward.onCreateResource(mEngine, this);
+		
 		preShotButton.onCreateResource(mEngine, this);
 		shotButton.onCreateResource(mEngine, this);
 	}
@@ -118,6 +124,8 @@ public class H2ScreenVer2Activity extends SimpleBaseGameActivity {
 		// Đưa thanh điều hướng vào Scene với tọa độ vừa tính
 		azimuthToward = new Azimuth(pX, pY, azimuthTowardRegion, this.getVertexBufferObjectManager());
 		mScene.getChildByIndex(1).attachChild(azimuthToward);
+		
+		rollToward.onCreateScene(mEngine, mScene);
 		
 		preShotButton.onCreateScene(mEngine, mScene);
 		shotButton.onCreateScene(mEngine, mScene);
