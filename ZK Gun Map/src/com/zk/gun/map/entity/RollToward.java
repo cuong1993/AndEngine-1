@@ -2,6 +2,8 @@ package com.zk.gun.map.entity;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.text.Text;
@@ -14,6 +16,7 @@ import org.andengine.opengl.texture.region.TiledTextureRegion;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.opengl.GLES20;
 
 import com.zk.gun.map.handler.OrientationHandler;
 import com.zk.gun.map.interfaces.IGunMap;
@@ -58,7 +61,8 @@ public class RollToward implements IGunMap {
 		this.mAtlas.load();
 		
 		FontFactory.setAssetBasePath("fonts/");
-		this.mFont = FontFactory.createFromAsset(mEngine.getFontManager(), mEngine.getTextureManager(), 512, 512, TextureOptions.BILINEAR, context.getAssets(), "Audiowide-Regular.ttf", 12, true, Color.WHITE);
+		this.mFont = FontFactory.createFromAsset(mEngine.getFontManager(), mEngine.getTextureManager(), 512, 512, TextureOptions.BILINEAR, context.getAssets(), "Plok.ttf", 32, true, Color.WHITE);
+		this.mFont.load();
 	}
 
 	/*
@@ -67,7 +71,9 @@ public class RollToward implements IGunMap {
 	@Override
 	public void onCreateScene(Engine mEngine, Scene mScene) {
 		
-		this.mText = new Text(pX, pY - 128, mFont, Float.toString(OrientationHandler.getValues()[2]), mEngine.getVertexBufferObjectManager());
+		this.mText = new Text(pX + 4, pY - 145, mFont, "00.00", "-90.00".length(), mEngine.getVertexBufferObjectManager());
+		this.mText.setBlendFunction(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+		this.mText.setAlpha(0.5f);
 		mScene.attachChild(mText);
 		
 		this.mSprite = new AnimatedSprite(pX, pY, mRegion, mEngine.getVertexBufferObjectManager()) {
@@ -81,6 +87,25 @@ public class RollToward implements IGunMap {
 				this.setY(pY);
 			}
 		};
+		/*
+		 * Đăng ký cập nhập tọa độ sau 0.03s 1 lần
+		 */
+		mEngine.registerUpdateHandler(new TimerHandler(0.03f, true, new ITimerCallback() {
+			
+			@Override
+			public void onTimePassed(final TimerHandler pTimerHandler) {
+				RollToward.this.setTextRoll(OrientationHandler.getValues()[2]);
+			}
+		}));
+		
 		mScene.attachChild(mSprite);
+	}
+	/**
+	 * Hàm thay đổi giá trị của Text
+	 * 
+	 * @param roll Góc cao của máy thời điểm hiện tại
+	 */
+	public void setTextRoll(float roll) {
+		mText.setText(Float.toString(roll));
 	}
 }
