@@ -106,6 +106,6 @@ public class RollToward implements IGunMap {
 	 * @param roll Góc cao của máy thời điểm hiện tại
 	 */
 	public void setTextRoll(float roll) {
-		mText.setText(Float.toString(roll));
+		mText.setText("" + roll);
 	}
 }
