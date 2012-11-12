@@ -14,14 +14,14 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
-
 import com.zk.gun.map.entity.Azimuth;
 import com.zk.gun.map.entity.PreShotButton;
 import com.zk.gun.map.entity.RollToward;
 import com.zk.gun.map.entity.ShotButton;
 import com.zk.gun.map.handler.OrientationHandler;
+import com.zk.gun.map.interfaces.GameConstants;
 
-public class H2ScreenVer2Activity extends SimpleBaseGameActivity {
+public class H2ScreenVer2Activity extends SimpleBaseGameActivity implements GameConstants{
 
 	// đối tượng để đăng ký nhận dữ liệu từ sensor
 	OrientationHandler orient;
@@ -110,7 +110,7 @@ public class H2ScreenVer2Activity extends SimpleBaseGameActivity {
 		mScene = new Scene();
 		
 		// Tạo 1 Scene với 5 lớp thiết kế
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < LAYER_COUNT; i++) {
 			mScene.attachChild(new Entity());
 		}
 		
@@ -123,7 +123,7 @@ public class H2ScreenVer2Activity extends SimpleBaseGameActivity {
 		
 		// Đưa thanh điều hướng vào Scene với tọa độ vừa tính
 		azimuthToward = new Azimuth(pX, pY, azimuthTowardRegion, this.getVertexBufferObjectManager());
-		mScene.getChildByIndex(1).attachChild(azimuthToward);
+		mScene.getChildByIndex(LAYER_AZIMUTH).attachChild(azimuthToward);
 		
 		rollToward.onCreateScene(mEngine, mScene);
 		

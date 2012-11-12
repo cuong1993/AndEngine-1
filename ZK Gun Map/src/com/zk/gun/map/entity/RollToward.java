@@ -7,18 +7,20 @@ import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.text.Text;
+import org.andengine.entity.text.TextOptions;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
+import org.andengine.util.HorizontalAlign;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.opengl.GLES20;
 
 import com.zk.gun.map.handler.OrientationHandler;
+import com.zk.gun.map.interfaces.GameConstants;
 import com.zk.gun.map.interfaces.IGunMap;
 
 /**
@@ -27,7 +29,7 @@ import com.zk.gun.map.interfaces.IGunMap;
  * @author zk
  * @since 11/11/2012
  */
-public class RollToward implements IGunMap {
+public class RollToward implements IGunMap, GameConstants {
 	// Tọa độ dựng thành phần đồ họa
 	private int pX;
 	private int pY;
@@ -61,7 +63,7 @@ public class RollToward implements IGunMap {
 		this.mAtlas.load();
 		
 		FontFactory.setAssetBasePath("fonts/");
-		this.mFont = FontFactory.createFromAsset(mEngine.getFontManager(), mEngine.getTextureManager(), 512, 512, TextureOptions.BILINEAR, context.getAssets(), "Plok.ttf", 32, true, Color.WHITE);
+		this.mFont = FontFactory.createFromAsset(mEngine.getFontManager(), mEngine.getTextureManager(), 128, 32, TextureOptions.BILINEAR, context.getAssets(), "Audiowide_Regular.ttf", 20, true, Color.BLACK);
 		this.mFont.load();
 	}
 
@@ -71,10 +73,16 @@ public class RollToward implements IGunMap {
 	@Override
 	public void onCreateScene(Engine mEngine, Scene mScene) {
 		
-		this.mText = new Text(pX + 4, pY - 145, mFont, "00.00", "-90.00".length(), mEngine.getVertexBufferObjectManager());
-		this.mText.setBlendFunction(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
-		this.mText.setAlpha(0.5f);
-		mScene.attachChild(mText);
+		this.mText = new Text(pX + 5, pY - 140, mFont, "87.00", 100, new TextOptions(HorizontalAlign.LEFT), mEngine.getVertexBufferObjectManager());
+		mScene.getChildByIndex(LAYER_ROLL).attachChild(mText);
+		
+		mEngine.registerUpdateHandler(new TimerHandler(0.2f, true, new ITimerCallback() {
+			
+			@Override
+			public void onTimePassed(TimerHandler arg0) {
+				RollToward.this.setTextRoll((int) OrientationHandler.getValues()[2]);
+			}
+		}));
 		
 		this.mSprite = new AnimatedSprite(pX, pY, mRegion, mEngine.getVertexBufferObjectManager()) {
 			/*
@@ -83,29 +91,20 @@ public class RollToward implements IGunMap {
 			@Override
 			protected void onManagedUpdate(final float pSecondsElapsed) {
 				// Tính lại tọa độ và thay đổi tương ứng
-				RollToward.this.pY = (int) (240 - OrientationHandler.getValues()[2] * (120 / 90));
+				RollToward.this.pY = (int) (240 - (OrientationHandler.getValues()[2] - 90) * (128 / 90));
 				this.setY(pY);
 			}
 		};
-		/*
-		 * Đăng ký cập nhập tọa độ sau 0.03s 1 lần
-		 */
-		mEngine.registerUpdateHandler(new TimerHandler(0.03f, true, new ITimerCallback() {
-			
-			@Override
-			public void onTimePassed(final TimerHandler pTimerHandler) {
-				RollToward.this.setTextRoll(OrientationHandler.getValues()[2]);
-			}
-		}));
 		
-		mScene.attachChild(mSprite);
+		mScene.getChildByIndex(LAYER_ROLL).attachChild(mSprite);
 	}
 	/**
 	 * Hàm thay đổi giá trị của Text
 	 * 
 	 * @param roll Góc cao của máy thời điểm hiện tại
 	 */
-	public void setTextRoll(float roll) {
-		mText.setText("" + roll);
+	public void setTextRoll(int roll) {
+		String text = Integer.toString(roll);
+		this.mText.setText(text);
 	}
 }
