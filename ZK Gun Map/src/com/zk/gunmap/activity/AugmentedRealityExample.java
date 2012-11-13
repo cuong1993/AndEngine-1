@@ -1,4 +1,4 @@
-package com.zk.gun.map;
+package com.zk.gunmap.activity;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.camera.hud.HUD;
@@ -14,12 +14,12 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 
-import com.zk.gun.map.entity.Azimuth;
-import com.zk.gun.map.entity.PreShotButton;
-import com.zk.gun.map.entity.RollToward;
-import com.zk.gun.map.entity.ShotButton;
-import com.zk.gun.map.handler.OrientationHandler;
-import com.zk.gun.map.interfaces.GameConstants;
+import com.zk.gunmap.entity.Azimuth;
+import com.zk.gunmap.entity.PreShotButton;
+import com.zk.gunmap.entity.RollToward;
+import com.zk.gunmap.entity.ShotButton;
+import com.zk.gunmap.handler.OrientationHandler;
+import com.zk.gunmap.interfaces.GameConstants;
 
 
 /**

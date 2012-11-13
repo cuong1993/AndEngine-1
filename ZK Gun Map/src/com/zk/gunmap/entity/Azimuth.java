@@ -1,9 +1,9 @@
-package com.zk.gun.map.entity;
+package com.zk.gunmap.entity;
 
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
-import com.zk.gun.map.handler.OrientationHandler;
+import com.zk.gunmap.handler.OrientationHandler;
 
 /**
  * Class mô tả đối tượng chỉ dẫn phương vị

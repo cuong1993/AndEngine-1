@@ -1,4 +1,4 @@
-package com.zk.gun.map.entity;
+package com.zk.gunmap.entity;
 
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;

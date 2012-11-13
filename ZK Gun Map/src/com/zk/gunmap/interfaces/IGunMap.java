@@ -1,4 +1,4 @@
-package com.zk.gun.map.interfaces;
+package com.zk.gunmap.interfaces;
 
 import org.andengine.engine.Engine;
 import org.andengine.entity.scene.Scene;

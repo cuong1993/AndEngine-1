@@ -1,4 +1,4 @@
-package com.zk.gun.map;
+package com.zk.gunmap.activity;
 
 import org.andengine.entity.scene.Scene;
 import org.andengine.extension.augmentedreality.BaseAugmentedRealityGameActivity;

@@ -1,4 +1,4 @@
-package com.zk.gun.map.entity;
+package com.zk.gunmap.entity;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
@@ -19,9 +19,9 @@ import org.andengine.util.HorizontalAlign;
 import android.content.Context;
 import android.graphics.Color;
 
-import com.zk.gun.map.handler.OrientationHandler;
-import com.zk.gun.map.interfaces.GameConstants;
-import com.zk.gun.map.interfaces.IGunMap;
+import com.zk.gunmap.handler.OrientationHandler;
+import com.zk.gunmap.interfaces.GameConstants;
+import com.zk.gunmap.interfaces.IGunMap;
 
 /**
  * Class thể hiện đối tượng RollToward chỉ dẫn góc nghiêng của máy
