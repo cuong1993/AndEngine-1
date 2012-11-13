@@ -21,7 +21,7 @@ import com.zk.gun.map.entity.ShotButton;
 import com.zk.gun.map.handler.OrientationHandler;
 import com.zk.gun.map.interfaces.GameConstants;
 
-public class H2ScreenVer2Activity extends SimpleBaseGameActivity implements GameConstants{
+public class H2ScreenVer2Activity extends SimpleBaseGameActivity implements GameConstants {
 
 	// đối tượng để đăng ký nhận dữ liệu từ sensor
 	OrientationHandler orient;
@@ -115,7 +115,7 @@ public class H2ScreenVer2Activity extends SimpleBaseGameActivity implements Game
 		}
 		
 		// Tạo màu nền cho Scene với màu trắng
-		mScene.setBackground(new Background(1, 1, 1));
+		mScene.setBackground(new Background(0.0f, 0.0f, 0.0f, 0.0f));
 		
 		// Tính tọa độ cho thanh điều hướng
 		float pX = (CAMERA_WIDTH - azimuthTowardRegion.getWidth()) / 2;
