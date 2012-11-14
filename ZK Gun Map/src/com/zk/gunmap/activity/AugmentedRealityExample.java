@@ -14,6 +14,7 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 
+import com.zk.gunmap.components.SimpleBaseAugmentedRealityGameActivity;
 import com.zk.gunmap.entity.Azimuth;
 import com.zk.gunmap.entity.PreShotButton;
 import com.zk.gunmap.entity.RollToward;

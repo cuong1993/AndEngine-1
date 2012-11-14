@@ -116,7 +116,7 @@ public class H2ScreenVer2Activity extends SimpleBaseGameActivity implements Game
 		}
 		
 		// Tạo màu nền cho Scene với màu trắng
-		mScene.setBackground(new Background(0.0f, 0.0f, 0.0f, 0.0f));
+		mScene.setBackground(new Background(1.0f, 1.0f, 1.0f, 0.0f));
 		
 		// Tính tọa độ cho thanh điều hướng
 		float pX = (CAMERA_WIDTH - azimuthTowardRegion.getWidth()) / 2;
