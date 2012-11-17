@@ -63,7 +63,7 @@ public class RollToward implements IGunMap, GameConstants {
 		this.mAtlas.load();
 		
 		FontFactory.setAssetBasePath("fonts/");
-		this.mFont = FontFactory.createFromAsset(mEngine.getFontManager(), mEngine.getTextureManager(), 128, 32, TextureOptions.BILINEAR, context.getAssets(), "Audiowide_Regular.ttf", 20, true, Color.BLACK);
+		this.mFont = FontFactory.createFromAsset(mEngine.getFontManager(), mEngine.getTextureManager(), 128, 64, TextureOptions.BILINEAR, context.getAssets(), "Audiowide_Regular.ttf", 20, true, Color.BLACK);
 		this.mFont.load();
 	}
 
