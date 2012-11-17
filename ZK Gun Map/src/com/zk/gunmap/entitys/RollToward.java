@@ -1,4 +1,4 @@
-package com.zk.gunmap.entity;
+package com.zk.gunmap.entitys;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
@@ -19,7 +19,7 @@ import org.andengine.util.HorizontalAlign;
 import android.content.Context;
 import android.graphics.Color;
 
-import com.zk.gunmap.handler.OrientationHandler;
+import com.zk.gunmap.handlers.OrientationHandler;
 import com.zk.gunmap.interfaces.GameConstants;
 import com.zk.gunmap.interfaces.IGunMap;
 
@@ -29,10 +29,12 @@ import com.zk.gunmap.interfaces.IGunMap;
  * @author zk
  * @since 11/11/2012
  */
-public class RollToward implements IGunMap, GameConstants {
+public class RollToward implements IGunMap,GameConstants {
 	// Tọa độ dựng thành phần đồ họa
 	private int pX;
 	private int pY;
+	// Lớp đồ họa để dựng đối tượng
+	private int mLayer;
 	// Các trường liên quan đến việc xây dựng phần đồ họa
 	private BitmapTextureAtlas mAtlas;
 	private TiledTextureRegion mRegion;
@@ -44,10 +46,12 @@ public class RollToward implements IGunMap, GameConstants {
 	/**
 	 * Hàm tạo class
 	 * 
+	 * @param layer Lớp đồ họa được sử dụng để dựng đối tượng
 	 * @param cameraWidth Chiều rộng của {@link Camera} game xây dựng
 	 * @param cameraHeight Chiều cao của {@link Camera} game xây dựng
 	 */
-	public RollToward(float cameraWidth, float cameraHeight) {
+	public RollToward(int layer, float cameraWidth, float cameraHeight) {
+		this.mLayer = layer;
 		this.pX = (int) (cameraWidth / 2);
 		this.pY = (int) (cameraHeight / 2);
 	}
@@ -74,7 +78,7 @@ public class RollToward implements IGunMap, GameConstants {
 	public void onCreateScene(Engine mEngine, Scene mScene) {
 		
 		this.mText = new Text(pX + 5, pY - 140, mFont, "87.00", 100, new TextOptions(HorizontalAlign.LEFT), mEngine.getVertexBufferObjectManager());
-		mScene.getChildByIndex(LAYER_ROLL).attachChild(mText);
+		mScene.getChildByIndex(mLayer).attachChild(mText);
 		
 		mEngine.registerUpdateHandler(new TimerHandler(0.2f, true, new ITimerCallback() {
 			
@@ -96,7 +100,7 @@ public class RollToward implements IGunMap, GameConstants {
 			}
 		};
 		
-		mScene.getChildByIndex(LAYER_ROLL).attachChild(mSprite);
+		mScene.getChildByIndex(mLayer).attachChild(mSprite);
 	}
 	/**
 	 * Hàm thay đổi giá trị của Text

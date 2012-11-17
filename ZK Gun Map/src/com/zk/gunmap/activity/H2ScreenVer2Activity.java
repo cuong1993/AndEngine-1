@@ -12,14 +12,13 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.TextureRegion;
-import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
-import com.zk.gunmap.entity.Azimuth;
-import com.zk.gunmap.entity.PreShotButton;
-import com.zk.gunmap.entity.RollToward;
-import com.zk.gunmap.entity.ShotButton;
-import com.zk.gunmap.handler.OrientationHandler;
+import com.zk.gunmap.entitys.AzimuthToward;
+import com.zk.gunmap.entitys.PreShotButton;
+import com.zk.gunmap.entitys.RollToward;
+import com.zk.gunmap.entitys.ShotButton;
+import com.zk.gunmap.handlers.OrientationHandler;
 import com.zk.gunmap.interfaces.GameConstants;
 
 public class H2ScreenVer2Activity extends SimpleBaseGameActivity implements GameConstants {
@@ -41,11 +40,8 @@ public class H2ScreenVer2Activity extends SimpleBaseGameActivity implements Game
 	private BitmapTextureAtlas crosshairsAtlas;
 	private TextureRegion crosshairsRegion;
 	
-	private BitmapTextureAtlas azimuthTowardAtlas;
-	private TiledTextureRegion azimuthTowardRegion;
-	
 	// Đối tượng Azimuth thể hiện sự thay đổi phương vị
-	private Azimuth azimuthToward;
+	private AzimuthToward azimuthToward;
 	private RollToward rollToward;
 	
 	private PreShotButton preShotButton;
@@ -63,7 +59,8 @@ public class H2ScreenVer2Activity extends SimpleBaseGameActivity implements Game
 		// Đăng ký nhận dữ liệu từ sensor Orientation
 		orient = new OrientationHandler(this);
 		
-		rollToward = new RollToward(CAMERA_WIDTH, CAMERA_HEIGHT);
+		azimuthToward = new AzimuthToward(LAYER_USER, CAMERA_WIDTH, CAMERA_HEIGHT);
+		rollToward = new RollToward(LAYER_USER, CAMERA_WIDTH, CAMERA_HEIGHT);
 		
 		preShotButton = new PreShotButton();
 		shotButton = new ShotButton(CAMERA_WIDTH);
@@ -92,11 +89,7 @@ public class H2ScreenVer2Activity extends SimpleBaseGameActivity implements Game
 		// Xây dựng HUD
 		createHUD();
 		
-		// Tạo khối dữ liệu cho thanh điều hướng cho hình azimuth_toward.png trong bộ nhớ
-		azimuthTowardAtlas = new BitmapTextureAtlas(getTextureManager(), 24, 48);
-		azimuthTowardRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(azimuthTowardAtlas, this, "azimuth_toward.png", 0, 0, 1, 1);
-		azimuthTowardAtlas.load();
-		
+		azimuthToward.onCreateResource(mEngine, this);
 		rollToward.onCreateResource(mEngine, this);
 		
 		preShotButton.onCreateResource(mEngine, this);
@@ -118,14 +111,7 @@ public class H2ScreenVer2Activity extends SimpleBaseGameActivity implements Game
 		// Tạo màu nền cho Scene với màu trắng
 		mScene.setBackground(new Background(1.0f, 1.0f, 1.0f, 0.0f));
 		
-		// Tính tọa độ cho thanh điều hướng
-		float pX = (CAMERA_WIDTH - azimuthTowardRegion.getWidth()) / 2;
-		float pY = 2;
-		
-		// Đưa thanh điều hướng vào Scene với tọa độ vừa tính
-		azimuthToward = new Azimuth(pX, pY, azimuthTowardRegion, this.getVertexBufferObjectManager());
-		mScene.getChildByIndex(LAYER_AZIMUTH).attachChild(azimuthToward);
-		
+		azimuthToward.onCreateScene(mEngine, mScene);
 		rollToward.onCreateScene(mEngine, mScene);
 		
 		preShotButton.onCreateScene(mEngine, mScene);
