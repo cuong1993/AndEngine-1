@@ -15,6 +15,7 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
 import com.zk.gunmap.entitys.AzimuthToward;
+import com.zk.gunmap.entitys.HealthBar;
 import com.zk.gunmap.entitys.PreShotButton;
 import com.zk.gunmap.entitys.RollToward;
 import com.zk.gunmap.entitys.ShotButton;
@@ -40,13 +41,15 @@ public class H2ScreenVer2Activity extends SimpleBaseGameActivity implements Game
 	private BitmapTextureAtlas crosshairsAtlas;
 	private TextureRegion crosshairsRegion;
 	
-	// Đối tượng Azimuth thể hiện sự thay đổi phương vị
+	// Đối tượng Azimuth, RollToward hiển thị điều hướng của máy
 	private AzimuthToward azimuthToward;
 	private RollToward rollToward;
 	
 	private PreShotButton preShotButton;
 	private ShotButton shotButton;
 
+	// Đối tượng HealthBar thể hiện lượng máu của người chơi
+	private HealthBar healthBar;
 	
 	/**
 	 * Phương thức khởi tạo {@link EngineOptions}
@@ -59,11 +62,16 @@ public class H2ScreenVer2Activity extends SimpleBaseGameActivity implements Game
 		// Đăng ký nhận dữ liệu từ sensor Orientation
 		orient = new OrientationHandler(this);
 		
+		// Khởi tạo các đối tượng điều hướng
 		azimuthToward = new AzimuthToward(LAYER_USER, CAMERA_WIDTH, CAMERA_HEIGHT);
 		rollToward = new RollToward(LAYER_USER, CAMERA_WIDTH, CAMERA_HEIGHT);
 		
+		// Khởi tạo các đối tượng điều khiển
 		preShotButton = new PreShotButton();
 		shotButton = new ShotButton(CAMERA_WIDTH);
+		
+		// Khởi tạo đối tượng trạng thái
+		healthBar = new HealthBar(LAYER_USER, CAMERA_WIDTH, CAMERA_HEIGHT);
 		
 		return new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED, new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT), mCamera);
 	}
@@ -94,6 +102,8 @@ public class H2ScreenVer2Activity extends SimpleBaseGameActivity implements Game
 		
 		preShotButton.onCreateResource(mEngine, this);
 		shotButton.onCreateResource(mEngine, this);
+		
+		healthBar.onCreateResource(mEngine, this);
 	}
 	
 	/**
@@ -116,6 +126,10 @@ public class H2ScreenVer2Activity extends SimpleBaseGameActivity implements Game
 		
 		preShotButton.onCreateScene(mEngine, mScene);
 		shotButton.onCreateScene(mEngine, mScene);
+		
+		healthBar.onCreateScene(mEngine, mScene);
+		
+//		mScene.setChildScene()
 		
 		return mScene;
 	}

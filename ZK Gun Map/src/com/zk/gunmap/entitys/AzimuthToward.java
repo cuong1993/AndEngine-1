@@ -38,7 +38,7 @@ public class AzimuthToward implements IGunMap, GameConstants {
 	public AzimuthToward(int layer, float cameraWidth, float cameraHeight) {
 		this.mLayer = layer;
 		this.pX = (int) (cameraWidth / 2);
-		this.pY = (int) (cameraHeight / 2);
+		this.pY = 0;
 	}
 	/*
 	 * Phương thức khởi tạo đối tượng đồ họa cho class
@@ -62,7 +62,7 @@ public class AzimuthToward implements IGunMap, GameConstants {
 			@Override
 			protected void onManagedUpdate(final float pSecondsElapsed) {
 				// Tính lại tọa độ và thay đổi tương ứng
-				AzimuthToward.this.pX = (int) (100 + (OrientationHandler.getValues()[0] * (128 / 90)));
+				AzimuthToward.this.pX = (int) (100 + (OrientationHandler.getValues()[0] * (10 / 6)));
 				this.setX(AzimuthToward.this.pX);
 			}
 		};

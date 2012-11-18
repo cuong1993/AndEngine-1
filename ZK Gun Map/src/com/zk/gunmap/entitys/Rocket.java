@@ -4,11 +4,18 @@ import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.AnimatedSprite;
+import org.andengine.entity.text.Text;
+import org.andengine.entity.text.TextOptions;
+import org.andengine.opengl.font.Font;
+import org.andengine.opengl.font.FontFactory;
+import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
+import org.andengine.util.HorizontalAlign;
 
 import android.content.Context;
+import android.graphics.Color;
 
 import com.zk.gunmap.interfaces.GameConstants;
 import com.zk.gunmap.interfaces.IGunMap;
@@ -17,6 +24,19 @@ public class Rocket implements IGunMap, GameConstants {
 
 	// Tọa độ dựng thành phần đồ họa
 	private int pX;
+	public int getX() {
+		return pX;
+	}
+	public void setX(int pX) {
+		this.pX = pX;
+	}
+	public int getY() {
+		return pY;
+	}
+	public void setY(int pY) {
+		this.pY = pY;
+	}
+
 	private int pY;
 	private int mWidth;
 	private int mHeight;
@@ -25,6 +45,8 @@ public class Rocket implements IGunMap, GameConstants {
 	private AnimatedSprite mSprite;
 	private TiledTextureRegion mTexture;
 	private BitmapTextureAtlas mAtlas;
+	// thuộc tính liên quan tới xây dựng thông báo bằng text
+	private Font mFont;
 	/**
 	 * Hàm tạo class
 	 * 
@@ -45,6 +67,10 @@ public class Rocket implements IGunMap, GameConstants {
 		mAtlas = new BitmapTextureAtlas(mEngine.getTextureManager(), 128, 128);
 		mTexture = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mAtlas, context, "rocket.png", 0, 0, 1, 4);
 		mAtlas.load();
+		
+		FontFactory.setAssetBasePath("fonts/");
+		this.mFont = FontFactory.createFromAsset(mEngine.getFontManager(), mEngine.getTextureManager(), 128, 64, TextureOptions.BILINEAR, context.getAssets(), "Plok.ttf", 20, true, Color.BLACK);
+		this.mFont.load();
 	}
 
 	@Override

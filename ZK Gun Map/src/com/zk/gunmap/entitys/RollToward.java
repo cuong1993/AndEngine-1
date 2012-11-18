@@ -109,6 +109,8 @@ public class RollToward implements IGunMap,GameConstants {
 	 */
 	public void setTextRoll(int roll) {
 		String text = Integer.toString(roll);
+		text += " / ";
+		text += Integer.toString((int) OrientationHandler.getValues()[0]);
 		this.mText.setText(text);
 	}
 }
