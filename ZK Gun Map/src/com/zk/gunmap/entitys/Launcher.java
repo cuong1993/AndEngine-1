@@ -13,8 +13,13 @@ import android.content.Context;
 import com.zk.gunmap.interfaces.GameConstants;
 import com.zk.gunmap.interfaces.IGunMap;
 
+/**
+ * class mô tả bệ phóng trên màn hình
+ * 
+ * @author z.k.
+ * @since 17/11/2012
+ */
 public class Launcher implements IGunMap, GameConstants {
-
 	// Tọa độ dựng thành phần đồ họa
 	private int pX;
 	private int pY;
