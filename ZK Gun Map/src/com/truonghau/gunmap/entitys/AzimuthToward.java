@@ -1,4 +1,4 @@
-package com.zk.gunmap.entitys;
+package com.truonghau.gunmap.entitys;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
@@ -8,9 +8,10 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 import android.content.Context;
-import com.zk.gunmap.handlers.OrientationHandler;
-import com.zk.gunmap.interfaces.GameConstants;
-import com.zk.gunmap.interfaces.IGunMap;
+
+import com.truonghau.gunmap.handlers.OrientationHandler;
+import com.truonghau.gunmap.interfaces.GameConstants;
+import com.truonghau.gunmap.interfaces.IGunMap;
 
 /**
  * Class thể hiện đối tượng RollToward chỉ dẫn góc nghiêng của máy

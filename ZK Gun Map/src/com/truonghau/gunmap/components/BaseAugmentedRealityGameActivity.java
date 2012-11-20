@@ -1,4 +1,4 @@
-package com.zk.gunmap.components;
+package com.truonghau.gunmap.components;
 
 
 import org.andengine.opengl.view.RenderSurfaceView;

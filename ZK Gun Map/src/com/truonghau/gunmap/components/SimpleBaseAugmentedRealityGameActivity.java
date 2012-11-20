@@ -1,4 +1,4 @@
-package com.zk.gunmap.components;
+package com.truonghau.gunmap.components;
 
 import org.andengine.entity.scene.Scene;
 import org.andengine.ui.IGameInterface;

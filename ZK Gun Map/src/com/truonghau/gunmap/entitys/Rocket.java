@@ -1,4 +1,4 @@
-package com.zk.gunmap.entitys;
+package com.truonghau.gunmap.entitys;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
@@ -13,8 +13,8 @@ import org.andengine.opengl.texture.region.TiledTextureRegion;
 import android.content.Context;
 import android.graphics.Color;
 
-import com.zk.gunmap.interfaces.GameConstants;
-import com.zk.gunmap.interfaces.IGunMap;
+import com.truonghau.gunmap.interfaces.GameConstants;
+import com.truonghau.gunmap.interfaces.IGunMap;
 
 public class Rocket implements IGunMap, GameConstants {
 	// Tọa độ dựng thành phần đồ họa

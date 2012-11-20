@@ -1,4 +1,4 @@
-package com.zk.gunmap.activity;
+package com.truonghau.gunmap.activity;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.camera.hud.HUD;
@@ -14,13 +14,13 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
-import com.zk.gunmap.entitys.AzimuthToward;
-import com.zk.gunmap.entitys.HealthBar;
-import com.zk.gunmap.entitys.PreShotButton;
-import com.zk.gunmap.entitys.RollToward;
-import com.zk.gunmap.entitys.ShotButton;
-import com.zk.gunmap.handlers.OrientationHandler;
-import com.zk.gunmap.interfaces.GameConstants;
+import com.truonghau.gunmap.entitys.AzimuthToward;
+import com.truonghau.gunmap.entitys.HealthBar;
+import com.truonghau.gunmap.entitys.PreShotButton;
+import com.truonghau.gunmap.entitys.RollToward;
+import com.truonghau.gunmap.entitys.ShotButton;
+import com.truonghau.gunmap.handlers.OrientationHandler;
+import com.truonghau.gunmap.interfaces.GameConstants;
 
 public class H2ScreenVer2Activity extends SimpleBaseGameActivity implements GameConstants {
 

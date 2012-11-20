@@ -1,4 +1,4 @@
-package com.zk.gunmap.entitys;
+package com.truonghau.gunmap.entitys;
 
 import org.andengine.engine.Engine;
 import org.andengine.entity.scene.Scene;
@@ -10,7 +10,7 @@ import org.andengine.opengl.texture.region.TextureRegion;
 
 import android.content.Context;
 
-import com.zk.gunmap.interfaces.IGunMap;
+import com.truonghau.gunmap.interfaces.IGunMap;
 
 /**
  * Class mô tả nút bắn

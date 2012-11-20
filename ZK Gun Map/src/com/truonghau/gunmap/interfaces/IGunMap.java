@@ -1,4 +1,4 @@
-package com.zk.gunmap.interfaces;
+package com.truonghau.gunmap.interfaces;
 
 import org.andengine.engine.Engine;
 import org.andengine.entity.scene.Scene;

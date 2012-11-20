@@ -1,4 +1,4 @@
-package com.zk.gunmap.entitys;
+package com.truonghau.gunmap.entitys;
 
 import org.andengine.engine.Engine;
 import org.andengine.entity.primitive.Rectangle;
@@ -7,7 +7,7 @@ import org.andengine.opengl.vbo.DrawType;
 
 import android.content.Context;
 
-import com.zk.gunmap.interfaces.IGunMap;
+import com.truonghau.gunmap.interfaces.IGunMap;
 
 /**
  * class mô tả thanh máu trên màn hình

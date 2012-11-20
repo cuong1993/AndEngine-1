@@ -1,4 +1,4 @@
-package com.zk.gunmap.interfaces;
+package com.truonghau.gunmap.interfaces;
 
 public interface GameConstants {
 	public static final int LAYER_COUNT = 10;
