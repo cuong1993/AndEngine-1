@@ -18,7 +18,7 @@ public class HealthBar implements IGunMap {
 	// Thuộc tính sử dụng để tính toán vị trí dựng hình
 	private float pX;
 	private float pY;
-	private int layer;
+	private int mLayer;
 	// Thuộc tính xây dựng thanh máu
 	private float mHealth;
 	private Rectangle mBar;	
@@ -30,7 +30,7 @@ public class HealthBar implements IGunMap {
 	 * @param cameraHeight Chiều cao của {@link Camera} sử dụng trong game
 	 */
 	public HealthBar (int layer, float cameraWidth, float cameraHeight) {
-		this.layer = layer;
+		this.mLayer = layer;
 		this.pX = (cameraWidth - 340) / 2;
 		this.pY = (cameraHeight - 256) / 2;
 		this.mHealth = 100;
@@ -44,7 +44,7 @@ public class HealthBar implements IGunMap {
 
 	@Override
 	public void onCreateScene(Engine mEngine, Scene mScene) {
-		mScene.getChildByIndex(layer).attachChild(mBar);
+		mScene.getChildByIndex(mLayer).attachChild(mBar);
 		updateHealth(80);
 	}
 	

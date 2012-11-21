@@ -25,7 +25,7 @@ import com.truonghau.gunmap.model.MemberUserItem;
  * @author zk-Home
  * @since 20/11/2012
  */
-public class RoketMenu implements IGunMap, GameConstants, IOnMenuItemClickListener {
+public class RocketMenu implements IGunMap, GameConstants, IOnMenuItemClickListener {
 	// Tổng số đối tượng có trên menu
 	private int itemCount;
 	// đối tượng để xây dựng menu
@@ -43,7 +43,7 @@ public class RoketMenu implements IGunMap, GameConstants, IOnMenuItemClickListen
 	 * @param mUserItem 1 Đối tượng {@link MemberUserItem}
 	 * @param itemCount Tổng số đối tượng muốn dựng trên menu
 	 */
-	public RoketMenu(MemberUserItem mUserItem, int itemCount) {
+	public RocketMenu(MemberUserItem mUserItem, int itemCount) {
 		this.itemCount = itemCount;
 		// Tạo các mảng với số lượng tương ứng với itemCount
 		this.mRegions = new ArrayList<TextureRegion>(this.itemCount);
@@ -74,8 +74,9 @@ public class RoketMenu implements IGunMap, GameConstants, IOnMenuItemClickListen
 			this.mItems.add(new SpriteMenuItem(mIDs[i], mRegions.get(i), mEngine.getVertexBufferObjectManager()));
 			this.mMenu.addMenuItem(this.mItems.get(i));
 		}
-		
+
 		mScene.setBackgroundEnabled(false);
+		mScene.setChildScene(mMenu);
 		this.mMenu.setOnMenuItemClickListener(this);
 	}
 	//--------------------------------------------------------------------------------------//
