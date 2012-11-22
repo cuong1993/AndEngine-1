@@ -127,7 +127,7 @@ public class H2ScreenVer2Activity extends SimpleBaseGameActivity implements Game
 		preShotButton.onCreateScene(mEngine, mScene);
 		shotButton.onCreateScene(mEngine, mScene);
 		
-		healthBar.onCreateScene(mEngine, mScene);
+//		healthBar.onCreateScene(mEngine, mScene);
 		
 //		mScene.setChildScene()
 		

@@ -8,6 +8,7 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 import android.content.Context;
+import android.location.Location;
 
 import com.truonghau.gunmap.handlers.OrientationHandler;
 import com.truonghau.gunmap.interfaces.GameConstants;
@@ -63,11 +64,20 @@ public class AzimuthToward implements IGunMap, GameConstants {
 			@Override
 			protected void onManagedUpdate(final float pSecondsElapsed) {
 				// Tính lại tọa độ và thay đổi tương ứng
-				AzimuthToward.this.pX = (int) (100 + (OrientationHandler.getValues()[0] * (10 / 6)));
-				this.setX(AzimuthToward.this.pX);
+				AzimuthToward.this.pX = (int) (100 + (OrientationHandler.getValues()[0] * 10 / 6));
+				AzimuthToward.this.mSprite.setX(AzimuthToward.this.pX);
 			}
 		};
 		
 		mScene.getChildByIndex(mLayer).attachChild(mSprite);
+	}
+	/**
+	 * Phương thức tính góc lệch giữa phương vĩ máy và tọa độ của đối thủ
+	 * 
+	 * @param oLocation Tọa độ của đối thủ
+	 * @return góc lệch giữa phương vĩ máy và tọa độ của đối thủ
+	 */
+	public float deltaCalcutaion(Location oLocation) {
+		return 0;
 	}
 }

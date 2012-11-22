@@ -74,9 +74,9 @@ public class RocketMenu implements IGunMap, GameConstants, IOnMenuItemClickListe
 			this.mItems.add(new SpriteMenuItem(mIDs[i], mRegions.get(i), mEngine.getVertexBufferObjectManager()));
 			this.mMenu.addMenuItem(this.mItems.get(i));
 		}
-
-		mScene.setBackgroundEnabled(false);
+		
 		mScene.setChildScene(mMenu);
+		this.mMenu.setBackgroundEnabled(false);
 		this.mMenu.setOnMenuItemClickListener(this);
 	}
 	//--------------------------------------------------------------------------------------//

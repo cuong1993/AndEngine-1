@@ -2,8 +2,6 @@ package com.truonghau.gunmap.entitys;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
-import org.andengine.engine.handler.timer.ITimerCallback;
-import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.text.Text;
@@ -80,14 +78,6 @@ public class RollToward implements IGunMap,GameConstants {
 		this.mText = new Text(pX + 5, pY - 140, mFont, "87.00", 100, new TextOptions(HorizontalAlign.LEFT), mEngine.getVertexBufferObjectManager());
 		mScene.getChildByIndex(mLayer).attachChild(mText);
 		
-		mEngine.registerUpdateHandler(new TimerHandler(0.2f, true, new ITimerCallback() {
-			
-			@Override
-			public void onTimePassed(TimerHandler arg0) {
-				RollToward.this.setTextRoll((int) OrientationHandler.getValues()[2]);
-			}
-		}));
-		
 		this.mSprite = new AnimatedSprite(pX, pY, mRegion, mEngine.getVertexBufferObjectManager()) {
 			/*
 			 * Phương thức cập nhập đối tượng trong 1 khoảng thời gian định trước
@@ -97,6 +87,7 @@ public class RollToward implements IGunMap,GameConstants {
 				// Tính lại tọa độ và thay đổi tương ứng
 				RollToward.this.pY = (int) (240 - (OrientationHandler.getValues()[2] - 90) * (128 / 90));
 				this.setY(pY);
+				RollToward.this.setTextRoll((int) OrientationHandler.getValues()[2]);
 			}
 		};
 		

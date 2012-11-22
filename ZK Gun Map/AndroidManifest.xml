@@ -13,7 +13,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.CAMERA"/>
     <application>
-        <activity android:name="com.zk.gunmap.activity.H2ScreenVer2Activity">
+        <activity android:name="com.truonghau.gunmap.activity.H2ScreenVer2Activity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

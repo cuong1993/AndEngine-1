@@ -1,6 +1,8 @@
 package com.truonghau.gunmap.entitys;
 
 import org.andengine.engine.Engine;
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.Scene;
 import org.andengine.opengl.vbo.DrawType;
@@ -45,7 +47,15 @@ public class HealthBar implements IGunMap {
 	@Override
 	public void onCreateScene(Engine mEngine, Scene mScene) {
 		mScene.getChildByIndex(mLayer).attachChild(mBar);
-		updateHealth(80);
+		// đăng ký hồi đáp 5s 1 đối với server về tình trạng máu của người chơi
+		mBar.registerUpdateHandler(new TimerHandler(5.0f, true, new ITimerCallback() {
+			
+			@Override
+			public void onTimePassed(TimerHandler arg0) {
+				// TODO gọi phương thức lấy tình trạng máu
+				// TODO gọi phương thức updateHealth cập nhập trạng thái lên màn hình
+			}
+		}));
 	}
 	
 	/**
