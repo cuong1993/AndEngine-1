@@ -21,6 +21,7 @@ import com.truonghau.gunmap.entitys.RollToward;
 import com.truonghau.gunmap.entitys.ShotButton;
 import com.truonghau.gunmap.handlers.OrientationHandler;
 import com.truonghau.gunmap.interfaces.GameConstants;
+import com.truonghau.gunmap.model.MemberUserItem;
 
 public class H2ScreenVer2Activity extends SimpleBaseGameActivity implements GameConstants {
 
@@ -50,6 +51,8 @@ public class H2ScreenVer2Activity extends SimpleBaseGameActivity implements Game
 
 	// Đối tượng HealthBar thể hiện lượng máu của người chơi
 	private HealthBar healthBar;
+	
+	private MemberUserItem mUserItem;
 	
 	/**
 	 * Phương thức khởi tạo {@link EngineOptions}

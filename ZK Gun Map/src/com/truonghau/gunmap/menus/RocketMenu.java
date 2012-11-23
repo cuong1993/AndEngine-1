@@ -59,7 +59,7 @@ public class RocketMenu implements IGunMap, GameConstants, IOnMenuItemClickListe
 	@Override
 	public void onCreateResource(Engine mEngine, Context context) {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("images/");
-		this.mAtlas = new BitmapTextureAtlas(mEngine.getTextureManager(), 128, 512);
+		this.mAtlas = new BitmapTextureAtlas(mEngine.getTextureManager(), this.itemCount * 200, 128);
 		for (int i = 0; i < this.itemCount; i++) {
 			String pPath = mPaths.get(i);
 			mRegions.add(BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlas, context, pPath, i * 170, 0));
@@ -69,12 +69,18 @@ public class RocketMenu implements IGunMap, GameConstants, IOnMenuItemClickListe
 	//--------------------------------------------------------------------------------------//
 	@Override
 	public void onCreateScene(Engine mEngine, Scene mScene) {
+		// Tạo Scene cho Menu
 		this.mMenu = new MenuScene(mEngine.getCamera());
+		
 		for (int i = 0; i < this.itemCount; i++) {
+			// Tạo các đối tượng trên Menu
 			this.mItems.add(new SpriteMenuItem(mIDs[i], mRegions.get(i), mEngine.getVertexBufferObjectManager()));
+			// Thay đổi vị trí của các đối tượng cho phù hợp
+			mItems.get(i).setPosition(50 + i * 170, 220);
+			// Gán các đối tượng vào trong Menu
 			this.mMenu.addMenuItem(this.mItems.get(i));
 		}
-		
+		// Đẩy menu lên màn hình
 		mScene.setChildScene(mMenu);
 		this.mMenu.setBackgroundEnabled(false);
 		this.mMenu.setOnMenuItemClickListener(this);

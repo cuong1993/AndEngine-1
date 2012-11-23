@@ -62,7 +62,7 @@ public class HealthBar implements IGunMap {
 	 * Phương thức thay đổi chiều cao cột healthbar
 	 * @param health lượng máu hiện tại
 	 */
-	public void updateHealth(float health) {
+	public void updateHealth(int health) {
 		while (this.mHealth > health) {
 			try {
 				Thread.sleep(30);
