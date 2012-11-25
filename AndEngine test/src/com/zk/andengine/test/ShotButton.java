@@ -1,6 +1,8 @@
-package com.truonghau.gunmap.entitys;
+package com.zk.andengine.test;
 
 import org.andengine.engine.Engine;
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
@@ -10,15 +12,13 @@ import org.andengine.opengl.texture.region.TextureRegion;
 
 import android.content.Context;
 
-import com.truonghau.gunmap.interfaces.IGunMap;
-
 /**
  * Class mô tả nút bắn
  * 
  * @author zk
  * @since 9/11/2012
  */
-public class ShotButton implements IGunMap {
+public class ShotButton {
 	
 	private int pX;
 	private int pY;
@@ -27,12 +27,11 @@ public class ShotButton implements IGunMap {
 	private TextureRegion mRegion;
 	private Sprite mSprite;
 	
-	public ShotButton(float cameraWidth) {
-		this.pX = (int) (cameraWidth - 120);
-		this.pY = 0;
+	public ShotButton(float cameraHeight) {
+		this.pX = 0;
+		this.pY = (int) (cameraHeight / 2);
 	}
 
-	@Override
 	public void onCreateResource(Engine mEngine, Context context) {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("images/");
 		this.mAtlas = new BitmapTextureAtlas(mEngine.getTextureManager(), 128, 128);
@@ -40,9 +39,10 @@ public class ShotButton implements IGunMap {
 		this.mAtlas.load();
 	}
 
-	@Override
 	public void onCreateScene(Engine mEngine, Scene mScene) {
+		
 		this.mSprite = new Sprite(pX, pY, mRegion, mEngine.getVertexBufferObjectManager()) {
+			
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				int act = pSceneTouchEvent.getAction();
@@ -57,6 +57,15 @@ public class ShotButton implements IGunMap {
 				return true;
 			}
 		};
+		
+		this.mSprite.registerUpdateHandler(new TimerHandler(0.1f, true, new ITimerCallback() {
+			
+			@Override
+			public void onTimePassed(TimerHandler pTimerHandler) {
+				ShotButton.this.pX += 8;
+				ShotButton.this.mSprite.setX(ShotButton.this.pX);
+			}
+		}));
 		mScene.attachChild(mSprite);
 		mScene.registerTouchArea(mSprite);
 	}

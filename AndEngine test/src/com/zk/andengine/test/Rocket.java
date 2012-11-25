@@ -1,4 +1,4 @@
-package com.truonghau.gunmap.entitys;
+package com.zk.andengine.test;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
@@ -11,7 +11,6 @@ import org.andengine.opengl.texture.region.TiledTextureRegion;
 import android.content.Context;
 import com.truonghau.gunmap.interfaces.GameConstants;
 import com.truonghau.gunmap.interfaces.IGunMap;
-import com.truonghau.gunmap.menus.RocketMenu;
 import com.truonghau.gunmap.model.MemberUserItem;
 
 public class Rocket implements IGunMap, GameConstants {
@@ -28,7 +27,7 @@ public class Rocket implements IGunMap, GameConstants {
 	private BitmapTextureAtlas mAtlas;
 	// Thuộc tính xây dựng menu khi chạm vào đối tượng
 	private RocketMenu mMenu;
-	// Đối tượng MemberUserItem tạm thời để thử nghiệm
+	
 	private MemberUserItem mUserItems;
 	/**
 	 * Hàm tạo class
