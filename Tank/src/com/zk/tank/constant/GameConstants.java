@@ -1,4 +1,4 @@
-package com.zk.lastexam.constant;
+package com.zk.tank.constant;
 
 public interface GameConstants {
 	//=========================================================//

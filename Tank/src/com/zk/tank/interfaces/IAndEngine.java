@@ -1,4 +1,4 @@
-package com.zk.lastexam.interfaces;
+package com.zk.tank.interfaces;
 
 import org.andengine.engine.Engine;
 import org.andengine.entity.scene.Scene;
