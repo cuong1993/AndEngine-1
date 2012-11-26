@@ -2,6 +2,14 @@ package com.zk.tank.constant;
 
 public interface GameConstants {
 	//=========================================================//
+	//			hằng số liên quan tới đường dẫn
+	//=========================================================//
+	public static final String ASSET_GRAPHICS = "gfx/";
+	public static final String ASSET_FONTS = "fonts/";
+	public static final String ASSET_MUSICS = "musics/";
+	public static final String ASSET_SOUNDS = "sounds/";
+	public static final String ASSET_TMX = "tmx/";
+	//=========================================================//
 	//			hằng số liên quan tới lớp đồ họa
 	//=========================================================//
 	public static final int LAYER_COUNT = 10;
