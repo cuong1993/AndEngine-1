@@ -1,7 +1,6 @@
 package com.zk.tank.entitys;
 
 import com.zk.tank.constant.GameConstants;
-import com.zk.tank.interfaces.Tank;
 
 public class Player extends Tank {
 	private int playerID;
