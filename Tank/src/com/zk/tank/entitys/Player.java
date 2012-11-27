@@ -1,68 +1,44 @@
 package com.zk.tank.entitys;
 
-import org.andengine.engine.Engine;
-import org.andengine.engine.handler.timer.ITimerCallback;
-import org.andengine.engine.handler.timer.TimerHandler;
-import org.andengine.entity.scene.Scene;
-
-import android.content.Context;
-
 import com.zk.tank.constant.GameConstants;
-import com.zk.tank.interfaces.IAndEngine;
 import com.zk.tank.interfaces.Tank;
 
-public class Player extends Tank implements GameConstants, IAndEngine {
+public class Player extends Tank {
+	private int playerID;
 	//=================================================================================//
 	//									CONSTRUCTORS
 	//=================================================================================//
-	
+	/**
+	 * Hàm tạo đối tượng {@link Player} mô tả sơ lược vị trí, hướng ban đầu và ID người chơi
+	 * 
+	 * @param tiledX Vị trí ô theo chiều ngang ban đầu muốn dựng 
+	 * @param tiledY Vị trí ô theo chiều dọc ban đầu muốn dựng
+	 * @param direction Hướng ban đầu của đối tượng (lấy từ interface {@link GameConstants}
+	 * @param playerID ID của người chơi (1: chủ phòng, 2..4L khách)
+	 */
+	public Player(int playerID, int tiledX, int tiledY, int direction) {
+		this(playerID, tiledX, tiledY, direction, SPEED_SLOW);
+	}
+
+	public Player(int playerID, int tiledX, int tiledY, int direction, float speed) {
+		super(tiledX, tiledY, direction, speed);
+		this.playerID = playerID;
+	}
 
 	//=================================================================================//
 	//										METHODs
 	//=================================================================================//
-	@Override
-	public void onCreateResource(Engine mEngine, Context context) {
-		
+	
+
+	//=================================================================================//
+	//									 SETTER & GETTER
+	//=================================================================================//
+	public int getPlayerID() {
+		return playerID;
 	}
 
-	@Override
-	public void onCreateScene(Engine mEngine, Scene mScene) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void move(boolean running) {
-		this.mSprite.registerUpdateHandler(new TimerHandler(0.03f, true, new ITimerCallback() {
-
-			@Override
-			public void onTimePassed(TimerHandler pTimerHandler) {
-				switch (Player.this.mDirection) {
-				case UP:
-					break;
-				case RIGHT:
-					break;
-				case DOWN:
-					break;
-				case LEFT:
-					break;
-				default:
-					break;
-				}
-			}
-		}));
-	}
-
-	@Override
-	public void fire() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void die() {
-		// TODO Auto-generated method stub
-		
+	public void setPlayerID(int playerID) {
+		this.playerID = playerID;
 	}
 
 }
