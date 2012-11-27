@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="20" height="15" tilewidth="32" tileheight="32">
+<map version="1.0" orientation="orthogonal" width="15" height="10" tilewidth="32" tileheight="32">
  <properties>
   <property name="level" value="1"/>
  </properties>
@@ -13,6 +13,11 @@
   <tile id="636">
    <properties>
     <property name="type" value="BUSH"/>
+   </properties>
+  </tile>
+  <tile id="827">
+   <properties>
+    <property name="type" value="WONDER"/>
    </properties>
   </tile>
   <tile id="884">
@@ -36,33 +41,33 @@
    </properties>
   </tile>
  </tileset>
- <layer name="background" width="20" height="15">
+ <layer name="background" width="15" height="10">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA5XSSS9DURTA8ds2aZuI+RMgQSLmT4AEG0PwBZCYV/gCSAyttjaGrZZW0NbGsNXSmraGLRLz9BH8b6rp69VXkbxf3j3vnnNyT951G4TwYA3rKBdCVKASVXDACRcW8I4PfOJLJOq88CGEMI5wjBZyWtGGdvgRQBA7yCQnC9nI0dRFEMUoOWMYxyLxEpaxYkiO9dYyrxo1qIWZPhZYsUu8h30cGJJjvbXM4xFGmFCMEpTi8o9z6K0LqC1EERrRhOYU86rn0O5pv9dRW48G9KEfA8q8src87xWucfPTJ95D+72b2h70YhozmBXJ9elmVfcmqJ3EFLzwYUOZV51V7z/JeJVaNzyIIIoTZV51Vu1a3TukNoQwHvCIpzTzpruXMr6l9g73MBNbYP3Hfft1/2CECR307ESXcj69dap5c5GHfNhgxzwcGKbvCE5xhnNciNh+Bu9BDIlEXrzOCRc2sYVt+GVvmYNnvOAVbyK2X8Z7DjaRyIvXBRDEN9foDnOwBAAA
+   H4sIAAAAAAAAA4XOORIBURDG8fck1kuQcA0SEssVSKyXIBlVlgyTkpBYEkxqdwFMSkLkDP5VSql5NTUT/Kq6X38z3TspxB4HTIUQM8yxwBtpZJBFTvyzR3jpfehR9zGALq29OguTjyCKGJa8rbCGIa29OouTTyCJFC68XXGDKa29OsuTL6CIksvNulLXyTegoelys6HUQ/IjjDFxudlU9m7Ib3HC2Wav0w138g888bLZ63SDhActtNGBn38EEEQIZVRQRU18v/1lu/gAOjfhAVgCAAA=
   </data>
  </layer>
- <layer name="rock" width="20" height="15">
+ <layer name="rock" width="15" height="10">
   <properties>
    <property name="type" value="ROCK"/>
   </properties>
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA5vNyMAwe4jjP0iY2uZiswef/cS6g5ruHaxm0cIthOIAX3zgM49YewYbplZaIzX9EmsntcyEmQEAk0W7NbAEAAA=
+   H4sIAAAAAAAAA9vLyMCwlwb4DxImRg02dfj0EmM/LfyFzx+E7CbkX1LMopa7ydVrw4xfHgAt5jIAWAIAAA==
   </data>
  </layer>
- <layer name="bush" width="20" height="15">
+ <layer name="bush" width="15" height="10">
   <properties>
    <property name="type" value="BUSH"/>
   </properties>
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA5vNyMAwexRj4Fom6ptHjpm49JFjHj496HKEzCZkP0weGVMSNtjcR0kcYdOPT4xYvxBrLzXMwmYmpWYRG/8DhQE8zDqasAQAAA==
+   H4sIAAAAAAAAA7vDyMBwZxDiWiZMProYLnFkPin6kMVJ1Ycuh08dMfYRq3+wYgBX8A3mWAIAAA==
   </data>
  </layer>
- <layer name="wonder" width="20" height="15">
+ <layer name="wonder" width="15" height="10">
   <properties>
    <property name="type" value="WONDER"/>
   </properties>
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA5vNyMAwexSP4lE8ionEpcwMDGXM1DNvKtCsaUSaBwBrtIRdsAQAAA==
+   H4sIAAAAAAAAA5vNyMAwexSPYipjAFMJZs9YAgAA
   </data>
  </layer>
 </map>
