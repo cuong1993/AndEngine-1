@@ -16,7 +16,7 @@ public class Player extends Tank {
 	 * @param playerID ID của người chơi (1: chủ phòng, 2..4L khách)
 	 */
 	public Player(int playerID, int tiledX, int tiledY, int direction) {
-		this(playerID, tiledX, tiledY, direction, SPEED_SLOW);
+		this(playerID, tiledX, tiledY, direction, SPEED_FAST);
 	}
 
 	public Player(int playerID, int tiledX, int tiledY, int direction, float speed) {

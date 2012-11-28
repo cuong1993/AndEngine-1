@@ -3,6 +3,9 @@ package com.zk.tank.entitys;
 import java.util.ArrayList;
 
 import org.andengine.engine.Engine;
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
+import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
@@ -10,8 +13,8 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import org.andengine.opengl.texture.region.TextureRegion;
 
 import android.content.Context;
-import android.graphics.Rect;
 
+import com.zk.tank.components.Collision;
 import com.zk.tank.constant.GameConstants;
 import com.zk.tank.interfaces.IAndEngine;
 
@@ -28,12 +31,10 @@ public abstract class Tank implements GameConstants, IAndEngine {
 	protected Sprite mSprite;
 	
 	protected int mDirection;
+	protected int cDirection;
 	
 	protected int tiledX;
 	protected int tiledY;
-	
-//	private float pX;
-//	private float pY;
 	
 	protected float speed;
 	
@@ -63,7 +64,7 @@ public abstract class Tank implements GameConstants, IAndEngine {
 	 * @param speed Tốc độ chạy của đối tượng
 	 */
 	public Tank(int tiledX, int tiledY, int direction, float speed) {
-		this.tiledX = tiledX;
+		this.tiledX = tiledX + 1;
 		this.tiledY = tiledY;
 		this.mDirection = direction;
 		this.speed = speed;
@@ -72,8 +73,12 @@ public abstract class Tank implements GameConstants, IAndEngine {
 	//=================================================================================//
 	//										METHODS
 	//=================================================================================//
-	/* 
+	/**
 	 * Phương thức khởi tạo tài nguyên đồ họa cần thiết để mô tả đối tượng bằng hình ảnh
+	 * 
+	 * @param mEngine {@link Enigne} sử dụng trong Game
+	 * @param context {@link Context} của Activity trong Game
+	 * 
 	 */
 	@Override
 	public void onCreateResource(Engine mEngine, Context context) {
@@ -83,12 +88,15 @@ public abstract class Tank implements GameConstants, IAndEngine {
 		this.mAtlas.load();
 	}
 	
-	/* 
+	/**
 	 * Phương thức dựng đồ họa đối tượng lên màn hình
+	 * 
+	 * @param mEngine {@link Enigne} sử dụng trong Game
+	 * @param mScene {@link Scene} sử dụng trong Game
 	 */
 	@Override
 	public void onCreateScene(Engine mEngine, Scene mScene) {
-		this.mSprite = new Sprite(16 + this.tiledX * TILED_WIDTH, this.tiledY * TILED_WIDTH + 8, this.mRegion, mEngine.getVertexBufferObjectManager());
+		this.mSprite = new Sprite(this.tiledX * TILED_WIDTH, this.tiledY * TILED_WIDTH + 8, this.mRegion, mEngine.getVertexBufferObjectManager());
 		this.mSprite.setScale(1.5f);
 		mScene.getChildByIndex(LAYER_TANK).attachChild(mSprite);
 	}
@@ -96,70 +104,85 @@ public abstract class Tank implements GameConstants, IAndEngine {
 	/**
 	 * Phương thức mô tả cách thức di chuyển của đối tượng
 	 */
-	public void move(final ArrayList<Rect> rocks) {
-		
-		switch (Tank.this.mDirection) {
-		case UP:
-			Tank.this.mSprite.setRotation(UP);
-			if (Tank.this.mSprite.getY() - 8 <= 0)
-				return;
-			else
-				Tank.this.mSprite.setPosition(Tank.this.mSprite.getX(), Tank.this.mSprite.getY() - SPEED_STEP);
-			break;
-		case RIGHT:
-			Tank.this.mSprite.setRotation(RIGHT);
-			if (Tank.this.mSprite.getX() + TILED_HEIGHT + 8 >= 800)
-				return;
-			else
-				Tank.this.mSprite.setPosition(Tank.this.mSprite.getX() + SPEED_STEP, Tank.this.mSprite.getY());
-			break;
-		case DOWN:
-			Tank.this.mSprite.setRotation(DOWN);
-			if (Tank.this.mSprite.getY() + TILED_HEIGHT + 8 >= 480)
-				return;
-			else
-				Tank.this.mSprite.setPosition(Tank.this.mSprite.getX(), Tank.this.mSprite.getY() + SPEED_STEP);
-			break;
-		case LEFT:
-			Tank.this.mSprite.setRotation(LEFT);
-			if (Tank.this.mSprite.getX() - 8 <= 0)
-				return;
-			else
-				Tank.this.mSprite.setPosition(Tank.this.mSprite.getX() - SPEED_STEP, Tank.this.mSprite.getY());
-			break;
-		default:
-			break;
-		}
+	public void move(final Engine mEngine, final ArrayList<Rectangle> rocks) {
+		this.mSprite.registerUpdateHandler(new TimerHandler(this.speed, new ITimerCallback() {
+			
+			@Override
+			public void onTimePassed(TimerHandler pTimerHandler) {
+
+				// Kiểm tra tính hợp lệ của bước di chuyển
+				boolean isCollision = Collision.isCollision(mEngine, mDirection, mSprite, rocks);
+
+				// Xử lý di chuyển với các hướng tương ứng
+				switch (Tank.this.mDirection) {
+
+				// hướng lên trên
+				case UP:
+					Tank.this.mSprite.setRotation(UP);
+					// kiểm tra 
+					if (Tank.this.mSprite.getY() - 8 <= 0 || isCollision)
+						return;
+					else
+						Tank.this.mSprite.setPosition(Tank.this.mSprite.getX(), Tank.this.mSprite.getY() - SPEED_STEP);
+					break;
+				case RIGHT:
+					Tank.this.mSprite.setRotation(RIGHT);
+					if (Tank.this.mSprite.getX() + TILED_HEIGHT >= 768 || isCollision)
+						return;
+					else
+						Tank.this.mSprite.setPosition(Tank.this.mSprite.getX() + SPEED_STEP, Tank.this.mSprite.getY());
+					break;
+				case DOWN:
+					Tank.this.mSprite.setRotation(DOWN);
+					if (Tank.this.mSprite.getY() - 8  + TILED_HEIGHT >= 480 || isCollision)
+						return;
+					else
+						Tank.this.mSprite.setPosition(Tank.this.mSprite.getX(), Tank.this.mSprite.getY() + SPEED_STEP);
+					break;
+				case LEFT:
+					Tank.this.mSprite.setRotation(LEFT);
+					if (Tank.this.mSprite.getX() <= 48 || isCollision)
+						return;
+					else
+						Tank.this.mSprite.setPosition(Tank.this.mSprite.getX() - SPEED_STEP, Tank.this.mSprite.getY());
+					break;
+				default:
+					break;
+				}
+			}
+		}));
 	}
 	
+	/**
+	 * Phương thức mô tả đối tượng ợ trạng thái bắn
+	 */
 	public void fire() {
 		
 	}
+	
+	/**
+	 * Phương thức mô tả đối tượng ở trạng thái chết
+	 */
 	public void die() {
 		
 	}
 	
 	/**
-	 * Phương thức xử lý di chuyển khi hướng di chuyển
-	 * của đối tượng {@link Tank} phía trước có vật cản
-	 * 
-	 * @param rocks Mảng chứa tọa độ của các Tiled mang thuộc tính ROCK
-	 * 
-	 * @return true nếu phía trước theo hướng đó không bị cản, false nếu ngược lại
+	 * Phương thức xử lý đối tượng khi chuyển hướng mà chưa vào vị trí có thể đổi
+	 * thì tiếp tục di chuyển theo hướng cũ cho tới khi tới tọa độ thích hợp
 	 */
-	public boolean collision(ArrayList<Rect> rocks) {
-		int left = (int) this.mSprite.getX();
-		int top = (int) this.mSprite.getY();
-		int right = left + TILED_WIDTH;
-		int bottom = top + TILED_HEIGHT;
+	public void keepMoving() {
 		
-		Rect tank = new Rect(left, top, right, bottom);
-
-		for (Rect rock : rocks) {
-			if (rock.contains(tank))
-				return false;
-		}
-		return true;
+	}
+	
+	/**
+	 * Phương thức mô tả đối tượng trong trạng thái hồi sinh
+	 * 
+	 * @param tiledX Vị trí ô theo chiều ngang muốn hồi sinh 
+	 * @param tiledY Vị trí ô theo chiều dọc muốn hồi sinh
+	 */
+	public void respawm(int tiledX, int tileY) {
+		
 	}
 
 	//===================================================================//
@@ -170,6 +193,7 @@ public abstract class Tank implements GameConstants, IAndEngine {
 	}
 
 	public void setmDirection(int mDirection) {
+		this.cDirection = this.mDirection;
 		this.mDirection = mDirection;
 	}
 

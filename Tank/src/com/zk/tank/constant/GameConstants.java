@@ -43,20 +43,20 @@ public interface GameConstants {
 	 */
 	public static final int TILED_VERTICAL = 15;	
 	/**
-	 * Độ rộng của 1 ô (32px)
+	 * Độ rộng của 1 ô (48px)
 	 */
 	public static final int TILED_WIDTH = 48;
 	/**
-	 * Độ cao của 1 ô (32px)
+	 * Độ cao của 1 ô (48px)
 	 */
 	public static final int TILED_HEIGHT = 48;
 	//=========================================================//
 	//			hằng số liên quan tới tốc độ chạy
 	//=========================================================//
-	public static final float SPEED_SLOW = 1.0f;
-	public static final float SPEED_MEDIUM = 1/50f;
-	public static final float SPEED_FAST = 1/60f;
-	public static final int SPEED_STEP = 48;
+	public static final float SPEED_SLOW = 1/24f;
+	public static final float SPEED_MEDIUM = 1/35f;
+	public static final float SPEED_FAST = 1/50f;
+	public static final int SPEED_STEP = 4;
 	//=========================================================//
 	//			hằng số liên quan tới tốc độ bắn
 	//=========================================================//

@@ -3,6 +3,7 @@ package com.zk.tank.components;
 import java.util.ArrayList;
 
 import org.andengine.engine.Engine;
+import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.Scene;
 import org.andengine.extension.tmx.TMXLayer;
 import org.andengine.extension.tmx.TMXLoader;
@@ -15,9 +16,9 @@ import org.andengine.util.debug.Debug;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.graphics.Rect;
 
 import com.zk.tank.constant.GameConstants;
+import com.zk.tank.entitys.Enigne;
 import com.zk.tank.interfaces.IAndEngine;
 
 /**
@@ -28,7 +29,7 @@ public class TiledMapRender implements GameConstants, IAndEngine {
 	private AssetManager mAssetManager;
 	private TMXTiledMap mTMXTiledMap;
 	
-	ArrayList<Rect> rocks;
+	ArrayList<Rectangle> rocks;
 
 	//=================================================================================//
 	//									CONSTRUCTORS
@@ -40,7 +41,7 @@ public class TiledMapRender implements GameConstants, IAndEngine {
 	 */
 	public TiledMapRender(AssetManager assetManager) {
 		this.mAssetManager = assetManager;
-		this.rocks = new ArrayList<Rect>();
+		this.rocks = new ArrayList<Rectangle>();
 	}
 
 	//=================================================================================//
@@ -51,11 +52,14 @@ public class TiledMapRender implements GameConstants, IAndEngine {
 		
 	}	
 
-	/* 
-	 * Phương thức dựng bản đồ từ file TMX lên màn hình
+	/**
+	 * Phương thức dựng đồ họa đối tượng lên màn hình
+	 * 
+	 * @param mEngine {@link Enigne} sử dụng trong Game
+	 * @param mScene {@link Scene} sử dụng trong Game
 	 */
 	@Override
-	public void onCreateScene(Engine mEngine, Scene mScene) {
+	public void onCreateScene(final Engine mEngine, Scene mScene) {
 		try {
 			final TMXLoader tmxLoader = new TMXLoader(this.mAssetManager, mEngine.getTextureManager(), 
 					mEngine.getVertexBufferObjectManager(), 
@@ -69,19 +73,18 @@ public class TiledMapRender implements GameConstants, IAndEngine {
 				public void onTMXTileWithPropertiesCreated(TMXTiledMap pTMXTiledMap, TMXLayer pTMXLayer,
 						TMXTile pTMXTile, TMXProperties<TMXTileProperty> pTMXProperties) {
 					
-					int left, top, right, bottom;
+					int left, top;
 					
 					// Lọc các đối tượng có kiểu ROCK
-					if (pTMXTile.getTMXTileProperties(pTMXTiledMap).containsTMXProperty("type", "ROCK")) {
+					if (pTMXTile.getTMXTileProperties(pTMXTiledMap).containsTMXProperty("type", "ROCK")
+							|| pTMXTile.getTMXTileProperties(pTMXTiledMap).containsTMXProperty("type", "WONDER")) {
 						
 						// Tính tọa độ các Tiled này trên màn hình
-						left = 48 + pTMXTile.getTileColumn() * TILED_WIDHT;
+						left = 48 + pTMXTile.getTileColumn() * TILED_WIDTH;
 						top = 8 + pTMXTile.getTileRow() * TILED_HEIGHT;
-						right = left + TILED_WIDHT;
-						bottom = top + TILED_HEIGHT;
 						
 						// Lưu các tọa độ vừa tính vào 1 mảng
-						TiledMapRender.this.rocks.add(new Rect(left, top, right, bottom));
+						TiledMapRender.this.rocks.add(new Rectangle(left, top, TILED_WIDTH, TILED_HEIGHT, mEngine.getVertexBufferObjectManager()));
 					}
 				}
 			});
@@ -101,6 +104,7 @@ public class TiledMapRender implements GameConstants, IAndEngine {
 				tmxLayer.setScale(1.5f);
 				mScene.getChildByIndex(LAYER_BUSH).attachChild(tmxLayer);
 			}
+			
 			// Đặt các lớp còn lại bên dưới lớp TANK khi dựng hình
 			else {
 				tmxLayer.setPosition(160, 80);
@@ -113,11 +117,11 @@ public class TiledMapRender implements GameConstants, IAndEngine {
 	//===================================================================//
 	//							GETTER & SETTER
 	//===================================================================//
-	public ArrayList<Rect> getRocks() {
+	public ArrayList<Rectangle> getRocks() {
 		return rocks;
 	}
 
-	public void setRocks(ArrayList<Rect> rocks) {
+	public void setRocks(ArrayList<Rectangle> rocks) {
 		this.rocks = rocks;
 	}
 }
