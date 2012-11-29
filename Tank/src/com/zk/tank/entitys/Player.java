@@ -5,7 +5,7 @@ import com.zk.tank.constant.GameConstants;
 /**
  * class mô tả 1 đối tượng {@link Player}
  * 
- * @author zk
+ * @author zk (ndviettien.zk@gmail.com)
  * @since 26/11/2012
  */
 public class Player extends Tank {
