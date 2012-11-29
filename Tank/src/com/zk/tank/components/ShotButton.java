@@ -14,6 +14,12 @@ import com.zk.tank.constant.GameConstants;
 import com.zk.tank.entitys.Player;
 import com.zk.tank.interfaces.IAndEngine;
 
+/**
+ * Class mô tả nút bắn trên màn hình
+ * 
+ * @author zk (ndviettien.zk@gmail.com)
+ * @since 28/11/2012
+ */
 public class ShotButton implements GameConstants, IAndEngine {
 
 	//=================================================================================//
