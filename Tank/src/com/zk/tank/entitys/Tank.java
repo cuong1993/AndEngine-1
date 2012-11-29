@@ -45,7 +45,8 @@ public abstract class Tank implements GameConstants, IAndEngine {
 	protected int bullets;
 	protected float shotSpeed;
 	
-	protected Explosion mExplosion;
+	protected Explosion mFiredExplosion;
+	protected Explosion mTankExplosion;
 
 	//=================================================================================//
 	//									CONSTRUCTORS
@@ -74,6 +75,7 @@ public abstract class Tank implements GameConstants, IAndEngine {
 		this.tiledY = tiledY;
 		this.mDirection = direction;
 		this.mBullet = new Bullet(1, SPEED_MEDIUM);
+		this.mFiredExplosion = new Explosion(Explosion.TypeExplosion.TANK_EXPLOSION);
 		this.bullets = 2;
 		this.speed = speed;
 	}
@@ -94,6 +96,8 @@ public abstract class Tank implements GameConstants, IAndEngine {
 		this.mAtlas = new BitmapTextureAtlas(mEngine.getTextureManager(), 32, 32);
 		this.mRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlas, context, "tank_player.png", 0, 0);
 		this.mAtlas.load();
+		
+		this.mFiredExplosion.onCreateResource(mEngine, context);
 	}
 	
 	/**
@@ -107,6 +111,8 @@ public abstract class Tank implements GameConstants, IAndEngine {
 		this.mSprite = new Sprite(this.tiledX * TILED_WIDTH, this.tiledY * TILED_WIDTH + 8, this.mRegion, mEngine.getVertexBufferObjectManager());
 		this.mSprite.setScale(1.5f);
 		mScene.getChildByIndex(LAYER_TANK).attachChild(mSprite);
+		
+		this.mFiredExplosion.onCreateScene(mEngine, mScene);
 	}
 	
 	/**
@@ -133,7 +139,7 @@ public abstract class Tank implements GameConstants, IAndEngine {
 					if (Tank.this.mSprite.getY() - 8 <= 0 || isCollision)
 						return;
 					else
-						// Di chuyển the bước 4px 1
+						// Di chuyển theo bước 4px
 						Tank.this.mSprite.setPosition(Tank.this.mSprite.getX(), Tank.this.mSprite.getY() - SPEED_STEP);
 					break;
 				case RIGHT:
@@ -142,7 +148,7 @@ public abstract class Tank implements GameConstants, IAndEngine {
 					if (Tank.this.mSprite.getX() + TILED_HEIGHT >= 768 || isCollision)
 						return;
 					else
-						// Di chuyển the bước 4px 1
+						// Di chuyển theo bước 4px 1
 						Tank.this.mSprite.setPosition(Tank.this.mSprite.getX() + SPEED_STEP, Tank.this.mSprite.getY());
 					break;
 				case DOWN:
@@ -151,7 +157,7 @@ public abstract class Tank implements GameConstants, IAndEngine {
 					if (Tank.this.mSprite.getY() - 8  + TILED_HEIGHT >= 480 || isCollision)
 						return;
 					else
-						// Di chuyển the bước 4px 1
+						// Di chuyển theo bước 4px 1
 						Tank.this.mSprite.setPosition(Tank.this.mSprite.getX(), Tank.this.mSprite.getY() + SPEED_STEP);
 					break;
 				case LEFT:
@@ -160,7 +166,7 @@ public abstract class Tank implements GameConstants, IAndEngine {
 					if (Tank.this.mSprite.getX() <= 48 || isCollision)
 						return;
 					else
-						// Di chuyển the bước 4px 1
+						// Di chuyển theo bước 4px 1
 						Tank.this.mSprite.setPosition(Tank.this.mSprite.getX() - SPEED_STEP, Tank.this.mSprite.getY());
 					break;
 				default:
@@ -198,10 +204,7 @@ public abstract class Tank implements GameConstants, IAndEngine {
 		}
 		
 		// Tạo chuỗi hình ảnh đạn bắn khỏi nòng pháo
-//		Explosion.perform(Explosion.TypeExplosion.FIRED_EXPLOSION, pX, pY, mScene);
-		
-		// Di chuyển viên đạn
-//		this.mBullet.move(this.mDirection, this.mSprite.getX(), this.mSprite.getY(), mEngine, mScene);
+		this.mFiredExplosion.perform(pX, pY);
 		this.bullets--;
 	}
 	

@@ -90,7 +90,7 @@ public class Explosion implements GameConstants, IAndEngine {
 		this.mSprite = new AnimatedSprite(0, 0, mRegion, mEngine.getVertexBufferObjectManager());
 		this.mSprite.setScale(1.5f);
 		this.mSprite.setVisible(false);
-		mScene.attachChild(this.mSprite);
+		mScene.getChildByIndex(LAYER_TANK).attachChild(this.mSprite);
 	}
 
 	/**
@@ -101,7 +101,7 @@ public class Explosion implements GameConstants, IAndEngine {
 	 * @param pY Tọa độ Y của vị trí cần mô tả
 	 * @param mScene {@link Scene} sử dụng dể dựng hình ảnh lên
 	 */
-	public void perform(TypeExplosion type, float pX, float pY) {
+	public void perform(float pX, float pY) {
 		this.mSprite.setPosition(pX, pY);
 		this.mSprite.setVisible(true);
 		this.used = true;
