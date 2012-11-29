@@ -18,7 +18,6 @@ import android.content.Context;
 import android.content.res.AssetManager;
 
 import com.zk.tank.constant.GameConstants;
-import com.zk.tank.entitys.Enigne;
 import com.zk.tank.interfaces.IAndEngine;
 
 /**
