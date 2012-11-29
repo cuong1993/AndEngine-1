@@ -34,6 +34,7 @@ public class Bullet implements GameConstants, IAndEngine {
 	
 	private int lvl;
 	private float speed;
+	private boolean used;
 
 	//=================================================================================//
 	//									  CONSTRUCTORS
@@ -42,6 +43,7 @@ public class Bullet implements GameConstants, IAndEngine {
 	public Bullet(int lvl, float speed) {
 		this.lvl = lvl;
 		this.speed = speed;
+		this.used = false;
 	}
 
 	//=================================================================================//
@@ -75,6 +77,8 @@ public class Bullet implements GameConstants, IAndEngine {
 		this.mSprite.setPosition(pX, pY);
 		this.mSprite.setVisible(true);
 		
+		this.used = true;
+		
 		this.mSprite.registerUpdateHandler(new TimerHandler(this.speed, new ITimerCallback() {
 			
 			@Override
@@ -92,6 +96,7 @@ public class Bullet implements GameConstants, IAndEngine {
 					// kiểm tra tính va chạm và vượt khỏi bản đồ
 					// nếu vi phạm, hiển thị chuỗi hình ảnh nổ
 					if (Bullet.this.mSprite.getY() - 8 <= 0 || isCollision) {
+						Bullet.this.used = false;
 						return;
 						}
 					else
@@ -102,8 +107,10 @@ public class Bullet implements GameConstants, IAndEngine {
 					Bullet.this.mSprite.setRotation(RIGHT);
 					// kiểm tra tính va chạm và vượt khỏi bản đồ
 					// nếu vi phạm, hiển thị chuỗi hình ảnh nổ
-					if (Bullet.this.mSprite.getX() + TILED_HEIGHT >= 768 || isCollision)
+					if (Bullet.this.mSprite.getX() + TILED_HEIGHT >= 768 || isCollision) {
+						Bullet.this.used = false;
 						return;
+					}
 					else
 						// Di chuyển theo bước 4px
 						Bullet.this.mSprite.setPosition(Bullet.this.mSprite.getX() + SPEED_STEP, Bullet.this.mSprite.getY());
@@ -112,8 +119,10 @@ public class Bullet implements GameConstants, IAndEngine {
 					Bullet.this.mSprite.setRotation(DOWN);
 					// kiểm tra tính va chạm và vượt khỏi bản đồ
 					// nếu vi phạm, hiển thị chuỗi hình ảnh nổ
-					if (Bullet.this.mSprite.getY() - 8  + TILED_HEIGHT >= 480 || isCollision)
+					if (Bullet.this.mSprite.getY() - 8  + TILED_HEIGHT >= 480 || isCollision) {
+						Bullet.this.used = false;
 						return;
+					}
 					else
 						// Di chuyển theo bước 4px
 						Bullet.this.mSprite.setPosition(Bullet.this.mSprite.getX(), Bullet.this.mSprite.getY() + SPEED_STEP);
@@ -122,8 +131,10 @@ public class Bullet implements GameConstants, IAndEngine {
 					Bullet.this.mSprite.setRotation(LEFT);
 					// kiểm tra tính va chạm và vượt khỏi bản đồ
 					// nếu vi phạm, hiển thị chuỗi hình ảnh nổ
-					if (Bullet.this.mSprite.getX() <= 48 || isCollision)
+					if (Bullet.this.mSprite.getX() <= 48 || isCollision) {
+						Bullet.this.used = false;
 						return;
+					}
 					else
 						// Di chuyển theo bước 4px
 						Bullet.this.mSprite.setPosition(Bullet.this.mSprite.getX() - SPEED_STEP, Bullet.this.mSprite.getY());
@@ -137,6 +148,10 @@ public class Bullet implements GameConstants, IAndEngine {
 
 	public void setPoisition(float pX, float pY) {
 		this.mSprite.setPosition(pX, pY);
+	}
+	
+	public boolean isUsed() {
+		return this.used;
 	}
 
 	//=================================================================================//
