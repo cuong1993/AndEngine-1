@@ -14,6 +14,7 @@ import android.content.Context;
 import com.zk.tank.components.Collision;
 import com.zk.tank.components.Explosion;
 import com.zk.tank.components.TiledMapRender;
+import com.zk.tank.components.Explosion.TypeExplosion;
 import com.zk.tank.constant.GameConstants;
 import com.zk.tank.interfaces.IAndEngine;
 
@@ -46,6 +47,7 @@ public class Bullet implements GameConstants, IAndEngine {
 		this.lvl = lvl;
 		this.speed = speed;
 		this.used = false;
+		mExplosion = new Explosion(TypeExplosion.BULLET_EXPLOSION);
 	}
 
 	//=================================================================================//
@@ -58,6 +60,8 @@ public class Bullet implements GameConstants, IAndEngine {
 		mAtlas = new BitmapTextureAtlas(mEngine.getTextureManager(), 5, 24);
 		mRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlas, context, "bullet.png", 0, 0);
 		mAtlas.load();
+		
+		this.mExplosion.onCreateResource(mEngine, context);
 	}
 
 	@Override
@@ -65,6 +69,8 @@ public class Bullet implements GameConstants, IAndEngine {
 		mSprite = new Sprite(0, 0, mRegion, mEngine.getVertexBufferObjectManager());
 		mSprite.setVisible(false);
 		mScene.attachChild(mSprite);
+		
+		this.mExplosion.onCreateScene(mEngine, mScene);
 	}
 
 	/**
@@ -99,6 +105,7 @@ public class Bullet implements GameConstants, IAndEngine {
 					// nếu vi phạm, hiển thị chuỗi hình ảnh nổ
 					if (Bullet.this.mSprite.getY() - 8 <= 0 || isCollision) {
 						Bullet.this.used = false;
+						Bullet.this.mExplosion.perform(pX, pY);
 						return;
 						}
 					else
