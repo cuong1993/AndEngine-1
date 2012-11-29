@@ -5,14 +5,20 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
-import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 
 import android.content.Context;
 
 import com.zk.tank.constant.GameConstants;
+import com.zk.tank.entitys.Tank;
 import com.zk.tank.interfaces.IAndEngine;
 
+/**
+ * class mô tả chuỗi hình ảnh sự kiện nổ trên màn hình
+ * 
+ * @author zk (ndviettien.zk@gmail.com)
+ * @since 28/11/2012
+ */
 public class Explosion implements GameConstants, IAndEngine {
 
 	//=================================================================================//
@@ -21,63 +27,80 @@ public class Explosion implements GameConstants, IAndEngine {
 	
 	private BitmapTextureAtlas mAtlas;
 	
-	private TiledTextureRegion mTankRegion;
-	private AnimatedSprite mTanknSprite;
-	
-	private TiledTextureRegion mFiredRegion;
-	private AnimatedSprite mFiredSprite;
-	
-	private TiledTextureRegion mBulletRegion;
-	private AnimatedSprite mBulletSprite;
-	
-	private TiledTextureRegion mWonderRegion;
-	private AnimatedSprite mWonderSprite;
+	private TiledTextureRegion mRegion;
+	private AnimatedSprite mSprite;
 	
 	private int tileX;
 	private int tileY;
 
-	//=================================================================================//
-	//									CONSTRUCTORS
-	//=================================================================================//
+	private TypeExplosion type;
 	
-	@Override
-	public void onCreateResource(Engine mEngine, Context context) {
-		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath(ASSET_GRAPHICS);
-		this.mAtlas = new BitmapTextureAtlas(mEngine.getTextureManager(), 512, 512);
-		this.mTankRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mAtlas, context, "tank_explosion.png", 0, 0, 5, 5);
-	}
-
-	@Override
-	public void onCreateScene(Engine mEngine, Scene mScene) {
-		this.mBulletSprite = new AnimatedSprite(0, 0, mBulletRegion, mEngine.getVertexBufferObjectManager());
-		this.mFiredSprite = new AnimatedSprite(0, 0, mFiredRegion, mEngine.getVertexBufferObjectManager());
-		this.mTanknSprite = new AnimatedSprite(0, 0, mTankRegion, mEngine.getVertexBufferObjectManager());
-		this.mWonderSprite = new AnimatedSprite(0, 0, mWonderRegion, mEngine.getVertexBufferObjectManager());
-	}
 
 	//=================================================================================//
 	//									   METHODS
 	//=================================================================================//
 	
-	public void perform(TypeExplosion type, int direction, float pX, float pY, Scene mScene) {
+	public Explosion(TypeExplosion type) {
 		
-		switch (type) {
-		
+	}
+
+	//=================================================================================//
+	//									   METHODS
+	//=================================================================================//
+
+	@Override
+	public void onCreateResource(Engine mEngine, Context context) {
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath(ASSET_GRAPHICS);
+		this.mAtlas = new BitmapTextureAtlas(mEngine.getTextureManager(), 512, 512);
+		switch (this.type) {
 		case BULLET_EXPLOSION:
-			mScene.attachChild(mBulletSprite);
-			return;
+		this.mRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mAtlas, context, "bullet_explosion", 0, 0, 4, 4);
+			break;
 			
 		case FIRED_EXPLOSION:
-			return;
+		this.mRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mAtlas, context, "fired_explosion", 128, 0, 4, 4);
+			break;
 			
 		case TANK_EXPLOSION:
-			return;
+		this.mRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mAtlas, context, "tank_explosion.png", 0, 128, 4, 4);
+			break;
 			
 		case WONDER_EXPLOSION:
-			return;
+		this.mRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mAtlas, context, "wonder_explosion", 128, 128, 4, 4);
+			break;
+			
+		default:
+			break;
 		}
+		this.mAtlas.load();
 	}
-	
+
+	@Override
+	public void onCreateScene(Engine mEngine, Scene mScene) {
+
+		mSprite = new AnimatedSprite(0, 0, mRegion, mEngine.getVertexBufferObjectManager());
+		mSprite.setScale(1.5f);
+		mSprite.setVisible(false);
+		mScene.attachChild(mSprite);
+	}
+
+	/**
+	 * Phương thức mô tả vụ nổ bằng hình ảnh
+	 * 
+	 * @param type kiểu {@link TypeExplosion} mà vụ nổ mô tả 
+	 * @param pX Tọa độ X của vị trí cần mô tả
+	 * @param pY Tọa độ Y của vị trí cần mô tả
+	 * @param mScene {@link Scene} sử dụng dể dựng hình ảnh lên
+	 */
+	public void perform(TypeExplosion type, float pX, float pY) {
+		mSprite.setPosition(pX, pY);
+		mSprite.setVisible(true);
+		mSprite.animate(16, false);
+	}
+
+	//=================================================================================//
+	//									GETTER & SETTER
+	//=================================================================================//
 	public int getTileX() {
 		return tileX;
 	}
@@ -94,10 +117,31 @@ public class Explosion implements GameConstants, IAndEngine {
 		this.tileY = tileY;
 	}
 
+	//=================================================================================//
+	//									   EXTENDS
+	//=================================================================================//
+	/**
+	 * Enum mô tả các kiểu vụ nổ trong game
+	 * 
+	 * @author zk
+	 * @since 28/11/2012
+	 */
 	public enum TypeExplosion {
+		/**
+		 * Kiểu nổ của đạn va chạm với đường biên hoặc vật cản
+		 */
 		BULLET_EXPLOSION,
+		/**
+		 * Kiểu nổ của đạn bắn khỏi nòng pháo
+		 */
 		FIRED_EXPLOSION,
+		/**
+		 * Kiểu nổ của đạn va chạm với đối tượng {@link Tank}
+		 */
 		TANK_EXPLOSION,
+		/**
+		 * Kiểu nổ của đạn va chạm với tượng chiến thắng
+		 */
 		WONDER_EXPLOSION
 	}
 }
