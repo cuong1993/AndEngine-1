@@ -34,14 +34,15 @@ public class Explosion implements GameConstants, IAndEngine {
 	private int tileY;
 
 	private TypeExplosion type;
-	
+	private boolean used;
 
 	//=================================================================================//
-	//									   METHODS
+	//									 CONSTRUCTORS
 	//=================================================================================//
 	
 	public Explosion(TypeExplosion type) {
-		
+		this.type = type;
+		this.used = false;
 	}
 
 	//=================================================================================//
@@ -50,23 +51,31 @@ public class Explosion implements GameConstants, IAndEngine {
 
 	@Override
 	public void onCreateResource(Engine mEngine, Context context) {
+		
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath(ASSET_GRAPHICS);
-		this.mAtlas = new BitmapTextureAtlas(mEngine.getTextureManager(), 512, 512);
+		this.mAtlas = new BitmapTextureAtlas(mEngine.getTextureManager(), 128, 128);
+		
+		// Tạo TextureRegion tương ứng với kiểu của đối tượng
 		switch (this.type) {
+		
+		// Kiểu nổ của đạn va chạm với đường biên hoặc vật cản
 		case BULLET_EXPLOSION:
 		this.mRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mAtlas, context, "bullet_explosion", 0, 0, 4, 4);
 			break;
 			
+		// Kiểu nổ của đạn bắn khỏi nòng pháo
 		case FIRED_EXPLOSION:
-		this.mRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mAtlas, context, "fired_explosion", 128, 0, 4, 4);
+		this.mRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mAtlas, context, "fired_explosion", 0, 0, 4, 4);
 			break;
 			
+		// Kiểu nổ của đạn va chạm với đối tượng Tank
 		case TANK_EXPLOSION:
-		this.mRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mAtlas, context, "tank_explosion.png", 0, 128, 4, 4);
+		this.mRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mAtlas, context, "tank_explosion.png", 0, 0, 4, 4);
 			break;
 			
+		// Kiểu nổ của đạn va chạm với tượng chiến thắng
 		case WONDER_EXPLOSION:
-		this.mRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mAtlas, context, "wonder_explosion", 128, 128, 4, 4);
+		this.mRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mAtlas, context, "wonder_explosion", 0, 0, 4, 4);
 			break;
 			
 		default:
@@ -78,10 +87,10 @@ public class Explosion implements GameConstants, IAndEngine {
 	@Override
 	public void onCreateScene(Engine mEngine, Scene mScene) {
 
-		mSprite = new AnimatedSprite(0, 0, mRegion, mEngine.getVertexBufferObjectManager());
-		mSprite.setScale(1.5f);
-		mSprite.setVisible(false);
-		mScene.attachChild(mSprite);
+		this.mSprite = new AnimatedSprite(0, 0, mRegion, mEngine.getVertexBufferObjectManager());
+		this.mSprite.setScale(1.5f);
+		this.mSprite.setVisible(false);
+		mScene.attachChild(this.mSprite);
 	}
 
 	/**
@@ -93,9 +102,15 @@ public class Explosion implements GameConstants, IAndEngine {
 	 * @param mScene {@link Scene} sử dụng dể dựng hình ảnh lên
 	 */
 	public void perform(TypeExplosion type, float pX, float pY) {
-		mSprite.setPosition(pX, pY);
-		mSprite.setVisible(true);
-		mSprite.animate(16, false);
+		this.mSprite.setPosition(pX, pY);
+		this.mSprite.setVisible(true);
+		this.used = true;
+		this.mSprite.animate(16, false);
+		this.mSprite.setVisible(false);
+	}
+	
+	public boolean isUsed() {
+		return this.used;
 	}
 
 	//=================================================================================//
