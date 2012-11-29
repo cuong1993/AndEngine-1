@@ -49,6 +49,7 @@ public class OnGameScreen extends SimpleBaseGameActivity implements GameConstant
 	private TextureRegion mOnScreenControlBaseTextureRegion;
 	private TextureRegion mOnScreenControlKnobTextureRegion;
 	private DigitalOnScreenControl mController;
+//	private float timeTouchController = 0;
 	
 	/*
 	 * Các trường thành phần xây dựng game
@@ -158,21 +159,25 @@ public class OnGameScreen extends SimpleBaseGameActivity implements GameConstant
 			public void onControlChange(final BaseOnScreenControl pBaseOnScreenControl, 
 					final float pValueX, final float pValueY) {
 
+//				OnGameScreen.this.timeTouchController += SPEED_SLOW;
+				int direction = NONE;
 				// Thay đổi hướng đối tượng Player phụ thuộc hướng của cần điều khiển
 				if(pValueX == 1) {
-					OnGameScreen.this.mPlayer.setmDirection(RIGHT);
+					direction = RIGHT;
 				} else if(pValueX == -1) {
-					OnGameScreen.this.mPlayer.setmDirection(LEFT);
+					direction = LEFT;
 				} else if(pValueY == 1) {
-					OnGameScreen.this.mPlayer.setmDirection(DOWN);
+					direction = DOWN;
 				} else if(pValueY == -1) {
-					OnGameScreen.this.mPlayer.setmDirection(UP);
+					direction = UP;
 				} else {
-					OnGameScreen.this.mPlayer.setmDirection(NONE);					
+					direction = NONE;					
 				}
 
+//				OnGameScreen.this.mPlayer.keepMoving(direction, timeTouchController);
 				// Di chuyển đối tượng theo hướng của cần điều khiển
-				OnGameScreen.this.mPlayer.move(OnGameScreen.this.mEngine);
+				OnGameScreen.this.mPlayer.setmDirection(direction);
+				OnGameScreen.this.mPlayer.move();
 			}
 		});
 
