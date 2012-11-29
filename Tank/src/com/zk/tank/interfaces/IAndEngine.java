@@ -25,7 +25,7 @@ public interface IAndEngine {
 	 * Phương thức dựng đồ họa đối tượng lên màn hình
 	 * 
 	 * @param mEngine {@link Enigne} sử dụng trong Game
-	 * @param mScene {@link Scene} sử dụng trong Game
+	 * @param mScene {@link Scene} dùng để đặt đối tượng lên
 	 */
 	public void onCreateScene(Engine mEngine, Scene mScene);
 }
