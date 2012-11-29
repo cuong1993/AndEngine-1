@@ -93,7 +93,7 @@ public class OnGameScreen extends SimpleBaseGameActivity implements GameConstant
 		
 		//======================================================================//
 		//						Tạo tài nguyên cho controller
-		//======================================================================//	
+		//======================================================================//
 		
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath(ASSET_GRAPHICS);
 		this.mOnScreenControlTexture = new BitmapTextureAtlas(this.getTextureManager(), 256, 128, TextureOptions.BILINEAR);
@@ -122,6 +122,9 @@ public class OnGameScreen extends SimpleBaseGameActivity implements GameConstant
 		
 		// Vẽ đối tượng Player lên màn hình
 		this.mPlayer.onCreateScene(this.mEngine, this.mScene);
+		
+
+//		this.mButton.onCreateScene(mEngine, mScene);
 		
 		// Vẽ TiledMap lên màn hình
 		this.mTMXRender.onCreateScene(mEngine, mScene);
