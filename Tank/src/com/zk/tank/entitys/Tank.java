@@ -1,11 +1,8 @@
 package com.zk.tank.entitys;
 
-import java.util.ArrayList;
-
 import org.andengine.engine.Engine;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
-import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
@@ -15,17 +12,22 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import android.content.Context;
 
 import com.zk.tank.components.Collision;
+import com.zk.tank.components.Explosion;
+import com.zk.tank.components.TiledMapRender;
 import com.zk.tank.constant.GameConstants;
 import com.zk.tank.interfaces.IAndEngine;
 
 /**
  * class mô tả 1 đối tượng {@link Tank}
  * 
- * @author zk
+ * @author zk <ndviettien.zk@gmail.com>
  * @since 26/11/2012
  */
 public abstract class Tank implements GameConstants, IAndEngine {
-	
+
+	//=================================================================================//
+	//										FIELDS
+	//=================================================================================//
 	protected BitmapTextureAtlas mAtlas;
 	protected TextureRegion mRegion;
 	protected Sprite mSprite;
@@ -38,8 +40,12 @@ public abstract class Tank implements GameConstants, IAndEngine {
 	
 	protected float speed;
 	
+	protected Bullet mBullet;
+	
 	protected int bullets;
 	protected float shotSpeed;
+	
+	protected Explosion mExplosion;
 
 	//=================================================================================//
 	//									CONSTRUCTORS
@@ -67,6 +73,8 @@ public abstract class Tank implements GameConstants, IAndEngine {
 		this.tiledX = tiledX + 1;
 		this.tiledY = tiledY;
 		this.mDirection = direction;
+		this.mBullet = new Bullet(1, SPEED_MEDIUM);
+		this.bullets = 2;
 		this.speed = speed;
 	}
 	
@@ -92,7 +100,7 @@ public abstract class Tank implements GameConstants, IAndEngine {
 	 * Phương thức dựng đồ họa đối tượng lên màn hình
 	 * 
 	 * @param mEngine {@link Enigne} sử dụng trong Game
-	 * @param mScene {@link Scene} sử dụng trong Game
+	 * @param mScene {@link Scene} dùng để đặt đối tượng lên
 	 */
 	@Override
 	public void onCreateScene(Engine mEngine, Scene mScene) {
@@ -103,15 +111,17 @@ public abstract class Tank implements GameConstants, IAndEngine {
 	
 	/**
 	 * Phương thức mô tả cách thức di chuyển của đối tượng
+	 * 
+	 * @param mEngine {@link Engine} được sử dụng trong game
 	 */
-	public void move(final Engine mEngine, final ArrayList<Rectangle> rocks) {
+	public void move(final Engine mEngine) {
 		this.mSprite.registerUpdateHandler(new TimerHandler(this.speed, new ITimerCallback() {
 			
 			@Override
 			public void onTimePassed(TimerHandler pTimerHandler) {
 
 				// Kiểm tra tính hợp lệ của bước di chuyển
-				boolean isCollision = Collision.isCollision(mEngine, mDirection, mSprite, rocks);
+				boolean isCollision = Collision.isCollision(mEngine, mDirection, mSprite, TiledMapRender.getRocks());
 
 				// Xử lý di chuyển với các hướng tương ứng
 				switch (Tank.this.mDirection) {
@@ -119,31 +129,38 @@ public abstract class Tank implements GameConstants, IAndEngine {
 				// hướng lên trên
 				case UP:
 					Tank.this.mSprite.setRotation(UP);
-					// kiểm tra 
+					// kiểm tra tính va chạm và vượt khỏi bản đồ
 					if (Tank.this.mSprite.getY() - 8 <= 0 || isCollision)
 						return;
 					else
+						// Di chuyển the bước 4px 1
 						Tank.this.mSprite.setPosition(Tank.this.mSprite.getX(), Tank.this.mSprite.getY() - SPEED_STEP);
 					break;
 				case RIGHT:
 					Tank.this.mSprite.setRotation(RIGHT);
+					// kiểm tra tính va chạm và vượt khỏi bản đồ
 					if (Tank.this.mSprite.getX() + TILED_HEIGHT >= 768 || isCollision)
 						return;
 					else
+						// Di chuyển the bước 4px 1
 						Tank.this.mSprite.setPosition(Tank.this.mSprite.getX() + SPEED_STEP, Tank.this.mSprite.getY());
 					break;
 				case DOWN:
 					Tank.this.mSprite.setRotation(DOWN);
+					// kiểm tra tính va chạm và vượt khỏi bản đồ
 					if (Tank.this.mSprite.getY() - 8  + TILED_HEIGHT >= 480 || isCollision)
 						return;
 					else
+						// Di chuyển the bước 4px 1
 						Tank.this.mSprite.setPosition(Tank.this.mSprite.getX(), Tank.this.mSprite.getY() + SPEED_STEP);
 					break;
 				case LEFT:
 					Tank.this.mSprite.setRotation(LEFT);
+					// kiểm tra tính va chạm và vượt khỏi bản đồ
 					if (Tank.this.mSprite.getX() <= 48 || isCollision)
 						return;
 					else
+						// Di chuyển the bước 4px 1
 						Tank.this.mSprite.setPosition(Tank.this.mSprite.getX() - SPEED_STEP, Tank.this.mSprite.getY());
 					break;
 				default:
@@ -154,10 +171,38 @@ public abstract class Tank implements GameConstants, IAndEngine {
 	}
 	
 	/**
-	 * Phương thức mô tả đối tượng ợ trạng thái bắn
+	 * Phương thức mô tả đối tượng ở trạng thái bắn
 	 */
-	public void fire() {
+	public void fire(Engine mEngine, Scene mScene) {
+		if (this.bullets == 0)
+			this.bullets = 2;
+		float pX = this.mSprite.getX();
+		float pY = this.mSprite.getY();
 		
+		// Tính toán lại tọa độ tương ứng với hướng của đối tượng
+		switch (this.mDirection) {
+		case UP:
+			pY -= TILED_HEIGHT / 2;
+			break;
+		case RIGHT:
+			pX += TILED_HEIGHT / 2;
+			break;
+		case DOWN:
+			pY += TILED_HEIGHT / 2;
+			break;
+		case LEFT:
+			pX -= TILED_HEIGHT / 2;
+			break;
+		default:
+			break;
+		}
+		
+		// Tạo chuỗi hình ảnh đạn bắn khỏi nòng pháo
+//		Explosion.perform(Explosion.TypeExplosion.FIRED_EXPLOSION, pX, pY, mScene);
+		
+		// Di chuyển viên đạn
+//		this.mBullet.move(this.mDirection, this.mSprite.getX(), this.mSprite.getY(), mEngine, mScene);
+		this.bullets--;
 	}
 	
 	/**
