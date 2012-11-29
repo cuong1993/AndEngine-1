@@ -18,6 +18,7 @@ import org.andengine.ui.activity.SimpleBaseGameActivity;
 
 import android.opengl.GLES20;
 
+import com.zk.tank.components.ShotButton;
 import com.zk.tank.components.TiledMapRender;
 import com.zk.tank.constant.GameConstants;
 import com.zk.tank.entitys.Player;
@@ -52,10 +53,13 @@ public class OnGameScreen extends SimpleBaseGameActivity implements GameConstant
 	/*
 	 * Các trường thành phần xây dựng game
 	 */
-	private Player mPlayer;
-	
 	private TiledMapRender mTMXRender;
+	private ShotButton mButton;
+	private Player mPlayer;
 
+	//=================================================================================//
+	//									   METHODS
+	//=================================================================================//
 	@Override
 	public EngineOptions onCreateEngineOptions() {
 
@@ -67,38 +71,50 @@ public class OnGameScreen extends SimpleBaseGameActivity implements GameConstant
 		this.mCamera = new Camera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
 		
 		// Khởi tạo EngineOptions, sử dụng màn hình chế độ ngang, dùng chế độ thu phóng theo tỉ lệ
-		this.mOptions = new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED, new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT), mCamera);
+		this.mOptions = new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED, 
+				new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT), mCamera);
 		
 		// Yêu cầu sử dụng tính năng cảm ứng đa điểm
 		this.mOptions.getTouchOptions().setNeedsMultiTouch(true);
 		
+		// Khởi tạo đối tượng TiledMapRender
+		this.mTMXRender = new TiledMapRender(this.getAssets());
+		
 		// Khởi tạo đối tượng Player với hướng mặc định quay lên trên 
 		this.mPlayer = new Player(1, 6, 9, UP);
 		
-		// Khởi tạo đối tượng TiledMapRender
-		this.mTMXRender = new TiledMapRender(this.getAssets());
+		this.mButton = new ShotButton(mPlayer);
 		
 		return this.mOptions;
 	}
 
 	@Override
 	protected void onCreateResources() {
-		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath(ASSET_GRAPHICS);
+		
 		//======================================================================//
 		//						Tạo tài nguyên cho controller
 		//======================================================================//	
+		
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath(ASSET_GRAPHICS);
 		this.mOnScreenControlTexture = new BitmapTextureAtlas(this.getTextureManager(), 256, 128, TextureOptions.BILINEAR);
-		this.mOnScreenControlBaseTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mOnScreenControlTexture, this, "onscreen_control_base.png", 0, 0);
-		this.mOnScreenControlKnobTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mOnScreenControlTexture, this, "onscreen_control_knob.png", 128, 0);
+		
+		this.mOnScreenControlBaseTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+				this.mOnScreenControlTexture, this, "onscreen_control_base.png", 0, 0);
+		
+		this.mOnScreenControlKnobTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+				this.mOnScreenControlTexture, this, "onscreen_control_knob.png", 128, 0);
+		
 		this.mOnScreenControlTexture.load();
 		
 		// Tạo tài nguyên cho đối tượng Playercủa Activity
 		this.mPlayer.onCreateResource(this.mEngine, this);
+		
+		this.mButton.onCreateResource(mEngine, this);
 	}
 
 	@Override
 	protected Scene onCreateScene() {
-//		this.createHUD();
+		this.createHUD();
 		
 		this.mScene = new Scene();
 		for (int i = 0; i< LAYER_COUNT; i++)
@@ -120,6 +136,7 @@ public class OnGameScreen extends SimpleBaseGameActivity implements GameConstant
 	//======================================================================//	
 	public void createHUD() {	
 		this.mHUD = new HUD();
+		this.mButton.onCreateScene(mEngine, mHUD);
 		this.mCamera.setHUD(mHUD);
 	}
 	
@@ -135,7 +152,8 @@ public class OnGameScreen extends SimpleBaseGameActivity implements GameConstant
 
 			// Xử lý dữ liệu khi cần điều khiển thay đổi
 			@Override
-			public void onControlChange(final BaseOnScreenControl pBaseOnScreenControl, final float pValueX, final float pValueY) {
+			public void onControlChange(final BaseOnScreenControl pBaseOnScreenControl, 
+					final float pValueX, final float pValueY) {
 
 				// Thay đổi hướng đối tượng Player phụ thuộc hướng của cần điều khiển
 				if(pValueX == 1) {
