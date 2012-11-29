@@ -75,5 +75,6 @@ public class ShotButton implements GameConstants, IAndEngine {
 		};
 		
 		mScene.registerTouchArea(mSprite);
+		mScene.attachChild(mSprite);
 	}
 }
