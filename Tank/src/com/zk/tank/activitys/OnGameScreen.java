@@ -25,10 +25,10 @@ import com.zk.tank.entitys.Player;
 /**
  * Màn hình khi chơi game
  * 
- * @author zk
+ * @author zk (ndviettien.zk@gmail.com)
  * @since 26/11/2012
  */
-public class OnGameScreen extends SimpleBaseGameActivity implements GameConstants{
+public class OnGameScreen extends SimpleBaseGameActivity implements GameConstants {
 	
 	//===============================================//
 	//					   FIELDS
@@ -53,6 +53,7 @@ public class OnGameScreen extends SimpleBaseGameActivity implements GameConstant
 	 * Các trường thành phần xây dựng game
 	 */
 	private Player mPlayer;
+	
 	private TiledMapRender mTMXRender;
 
 	@Override
@@ -124,7 +125,7 @@ public class OnGameScreen extends SimpleBaseGameActivity implements GameConstant
 	
 	//======================================================================//
 	//							  Tạo Controller
-	//======================================================================//	
+	//======================================================================//
 	public void createController() {
 		
 		// Xây dựng 1 cần điều khiển
@@ -150,7 +151,7 @@ public class OnGameScreen extends SimpleBaseGameActivity implements GameConstant
 				}
 
 				// Di chuyển đối tượng theo hướng của cần điều khiển
-				OnGameScreen.this.mPlayer.move(OnGameScreen.this.mEngine, OnGameScreen.this.mTMXRender.getRocks());
+				OnGameScreen.this.mPlayer.move(OnGameScreen.this.mEngine);
 			}
 		});
 
