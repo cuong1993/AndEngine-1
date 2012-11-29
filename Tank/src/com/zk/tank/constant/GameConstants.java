@@ -51,16 +51,11 @@ public interface GameConstants {
 	 */
 	public static final int TILED_HEIGHT = 48;
 	//=========================================================//
-	//			hằng số liên quan tới tốc độ chạy
+	//			   hằng số liên quan tới tốc độ
 	//=========================================================//
 	public static final float SPEED_SLOW = 1/24f;
 	public static final float SPEED_MEDIUM = 1/35f;
 	public static final float SPEED_FAST = 1/50f;
+	public static final float SPEED_EXTRA = 1/60;
 	public static final int SPEED_STEP = 4;
-	//=========================================================//
-	//			hằng số liên quan tới tốc độ bắn
-	//=========================================================//
-	public static final float SHOT_SPEED_SLOW = 1.0f;
-	public static final float SHOT_SPEED_MEDIUM = 0.7f;
-	public static final float SHOT_SPEED_FAST = 0.5f;
 }
