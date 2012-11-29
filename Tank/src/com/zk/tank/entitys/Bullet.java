@@ -32,6 +32,8 @@ public class Bullet implements GameConstants, IAndEngine {
 	private TextureRegion mRegion;
 	private Sprite mSprite;
 	
+	private Explosion mExplosion;
+	
 	private int lvl;
 	private float speed;
 	private boolean used;
