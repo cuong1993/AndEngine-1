@@ -21,14 +21,16 @@ import com.zk.tank.constant.GameConstants;
 import com.zk.tank.interfaces.IAndEngine;
 
 /**
- * @author zk
+ * class mô tả phương thức dựng 1 bản đồ tmx lên màn hình
+ * 
+ * @author zk (ndviettien.zk@gmail.com)
  * @since 27/11/2012
  */
 public class TiledMapRender implements GameConstants, IAndEngine {
 	private AssetManager mAssetManager;
 	private TMXTiledMap mTMXTiledMap;
 	
-	ArrayList<Rectangle> rocks;
+	private static ArrayList<Rectangle> rocks;
 
 	//=================================================================================//
 	//									CONSTRUCTORS
@@ -40,7 +42,7 @@ public class TiledMapRender implements GameConstants, IAndEngine {
 	 */
 	public TiledMapRender(AssetManager assetManager) {
 		this.mAssetManager = assetManager;
-		this.rocks = new ArrayList<Rectangle>();
+		rocks = new ArrayList<Rectangle>();
 	}
 
 	//=================================================================================//
@@ -55,7 +57,7 @@ public class TiledMapRender implements GameConstants, IAndEngine {
 	 * Phương thức dựng đồ họa đối tượng lên màn hình
 	 * 
 	 * @param mEngine {@link Enigne} sử dụng trong Game
-	 * @param mScene {@link Scene} sử dụng trong Game
+	 * @param mScene {@link Scene} dùng để đặt đối tượng lên
 	 */
 	@Override
 	public void onCreateScene(final Engine mEngine, Scene mScene) {
@@ -83,7 +85,7 @@ public class TiledMapRender implements GameConstants, IAndEngine {
 						top = 8 + pTMXTile.getTileRow() * TILED_HEIGHT;
 						
 						// Lưu các tọa độ vừa tính vào 1 mảng
-						TiledMapRender.this.rocks.add(new Rectangle(left, top, TILED_WIDTH, TILED_HEIGHT, mEngine.getVertexBufferObjectManager()));
+						rocks.add(new Rectangle(left, top, TILED_WIDTH, TILED_HEIGHT, mEngine.getVertexBufferObjectManager()));
 					}
 				}
 			});
@@ -116,11 +118,7 @@ public class TiledMapRender implements GameConstants, IAndEngine {
 	//===================================================================//
 	//							GETTER & SETTER
 	//===================================================================//
-	public ArrayList<Rectangle> getRocks() {
+	public static ArrayList<Rectangle> getRocks() {
 		return rocks;
-	}
-
-	public void setRocks(ArrayList<Rectangle> rocks) {
-		this.rocks = rocks;
 	}
 }
