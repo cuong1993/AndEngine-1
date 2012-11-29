@@ -28,6 +28,7 @@ public abstract class Tank implements GameConstants, IAndEngine {
 	//=================================================================================//
 	//										FIELDS
 	//=================================================================================//
+	protected Engine mEngine;
 	protected BitmapTextureAtlas mAtlas;
 	protected TextureRegion mRegion;
 	protected Sprite mSprite;
@@ -46,7 +47,7 @@ public abstract class Tank implements GameConstants, IAndEngine {
 	protected float shotSpeed;
 	
 	protected Explosion mFiredExplosion;
-	protected Explosion mTankExplosion;
+	protected Explosion mExplosion;
 
 	//=================================================================================//
 	//									CONSTRUCTORS
@@ -75,7 +76,8 @@ public abstract class Tank implements GameConstants, IAndEngine {
 		this.tiledY = tiledY;
 		this.mDirection = direction;
 		this.mBullet = new Bullet(1, SPEED_MEDIUM);
-		this.mFiredExplosion = new Explosion(Explosion.TypeExplosion.TANK_EXPLOSION);
+		this.mFiredExplosion = new Explosion(Explosion.TypeExplosion.FIRED_EXPLOSION);
+		this.mExplosion = new Explosion(Explosion.TypeExplosion.TANK_EXPLOSION);
 		this.bullets = 2;
 		this.speed = speed;
 	}
@@ -96,6 +98,8 @@ public abstract class Tank implements GameConstants, IAndEngine {
 		this.mAtlas = new BitmapTextureAtlas(mEngine.getTextureManager(), 32, 32);
 		this.mRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlas, context, "tank_player.png", 0, 0);
 		this.mAtlas.load();
+		
+		this.mEngine = mEngine;
 		
 		this.mFiredExplosion.onCreateResource(mEngine, context);
 	}
@@ -120,14 +124,14 @@ public abstract class Tank implements GameConstants, IAndEngine {
 	 * 
 	 * @param mEngine {@link Engine} được sử dụng trong game
 	 */
-	public void move(final Engine mEngine) {
+	public void move() {
 		this.mSprite.registerUpdateHandler(new TimerHandler(this.speed, new ITimerCallback() {
 			
 			@Override
 			public void onTimePassed(TimerHandler pTimerHandler) {
 
 				// Kiểm tra tính hợp lệ của bước di chuyển
-				boolean isCollision = Collision.isCollision(mEngine, mDirection, mSprite, TiledMapRender.getRocks());
+				boolean isCollision = Collision.isCollision(Tank.this.mEngine, mDirection, mSprite, TiledMapRender.getRocks());
 
 				// Xử lý di chuyển với các hướng tương ứng
 				switch (Tank.this.mDirection) {
@@ -179,14 +183,14 @@ public abstract class Tank implements GameConstants, IAndEngine {
 	/**
 	 * Phương thức mô tả đối tượng ở trạng thái bắn
 	 */
-	public void fire(Engine mEngine, Scene mScene) {
+	public void fire() {
 		if (this.bullets == 0)
 			this.bullets = 2;
 		float pX = this.mSprite.getX();
 		float pY = this.mSprite.getY();
 		
 		// Tính toán lại tọa độ tương ứng với hướng của đối tượng
-		switch (this.mDirection) {
+		switch (this.cDirection) {
 		case UP:
 			pY -= TILED_HEIGHT / 2;
 			break;
@@ -212,15 +216,31 @@ public abstract class Tank implements GameConstants, IAndEngine {
 	 * Phương thức mô tả đối tượng ở trạng thái chết
 	 */
 	public void die() {
-		
+		this.mExplosion.perform(this.mSprite.getX(), this.mSprite.getY());
+		this.mSprite.setVisible(false);
 	}
 	
 	/**
 	 * Phương thức xử lý đối tượng khi chuyển hướng mà chưa vào vị trí có thể đổi
 	 * thì tiếp tục di chuyển theo hướng cũ cho tới khi tới tọa độ thích hợp
 	 */
-	public void keepMoving() {
-		
+	public void keepMoving(int direction, float timeTouchController) {
+		if (timeTouchController >= SPEED_SLOW * 3) {
+			
+			if (((int) this.mSprite.getX() % 16 != 0 || ((int) this.mSprite.getY() - 8) % 16 != 0)
+					&& this.cDirection != direction) {
+				
+				this.mDirection = this.cDirection;
+				move();
+			} else {
+
+				this.mDirection = direction;
+				move();
+			}
+		} else {
+			
+			this.mDirection = direction;
+		}
 	}
 	
 	/**
@@ -241,7 +261,8 @@ public abstract class Tank implements GameConstants, IAndEngine {
 	}
 
 	public void setmDirection(int mDirection) {
-		this.cDirection = this.mDirection;
+		if (this.mDirection != NONE) 
+			this.cDirection = this.mDirection;
 		this.mDirection = mDirection;
 	}
 

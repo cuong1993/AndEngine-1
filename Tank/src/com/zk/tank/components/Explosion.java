@@ -60,12 +60,12 @@ public class Explosion implements GameConstants, IAndEngine {
 		
 		// Kiểu nổ của đạn va chạm với đường biên hoặc vật cản
 		case BULLET_EXPLOSION:
-		this.mRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mAtlas, context, "bullet_explosion", 0, 0, 4, 4);
+		this.mRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mAtlas, context, "bullet_explosion.png", 0, 0, 4, 4);
 			break;
 			
 		// Kiểu nổ của đạn bắn khỏi nòng pháo
 		case FIRED_EXPLOSION:
-		this.mRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mAtlas, context, "fired_explosion", 0, 0, 4, 4);
+		this.mRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mAtlas, context, "fired_explosion.png", 0, 0, 4, 4);
 			break;
 			
 		// Kiểu nổ của đạn va chạm với đối tượng Tank
@@ -75,7 +75,7 @@ public class Explosion implements GameConstants, IAndEngine {
 			
 		// Kiểu nổ của đạn va chạm với tượng chiến thắng
 		case WONDER_EXPLOSION:
-		this.mRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mAtlas, context, "wonder_explosion", 0, 0, 4, 4);
+		this.mRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mAtlas, context, "wonder_explosion.png", 0, 0, 4, 4);
 			break;
 			
 		default:
@@ -88,7 +88,7 @@ public class Explosion implements GameConstants, IAndEngine {
 	public void onCreateScene(Engine mEngine, Scene mScene) {
 
 		this.mSprite = new AnimatedSprite(0, 0, mRegion, mEngine.getVertexBufferObjectManager());
-		this.mSprite.setScale(1.5f);
+		this.mSprite.setScale(1.0f);
 		this.mSprite.setVisible(false);
 		mScene.getChildByIndex(LAYER_TANK).attachChild(this.mSprite);
 	}
@@ -105,8 +105,32 @@ public class Explosion implements GameConstants, IAndEngine {
 		this.mSprite.setPosition(pX, pY);
 		this.mSprite.setVisible(true);
 		this.used = true;
-		this.mSprite.animate(16, false);
-		this.mSprite.setVisible(false);
+		this.mSprite.animate(24, false, new AnimatedSprite.IAnimationListener() {
+			
+			@Override
+			public void onAnimationStarted(AnimatedSprite arg0, int arg1) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onAnimationLoopFinished(AnimatedSprite arg0, int arg1, int arg2) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onAnimationFrameChanged(AnimatedSprite arg0, int arg1, int arg2) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onAnimationFinished(AnimatedSprite arg0) {
+				Explosion.this.used = false;
+				Explosion.this.mSprite.setVisible(false);
+			}
+		});
 	}
 	
 	public boolean isUsed() {

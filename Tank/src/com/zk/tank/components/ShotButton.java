@@ -65,8 +65,7 @@ public class ShotButton implements GameConstants, IAndEngine {
 				
 				// Đưa đối tượng Player vào trạng thái bắn nếu chạm xuống hoặc di chuyển trên đối tượng
 				case TouchEvent.ACTION_DOWN:
-				case TouchEvent.ACTION_MOVE:
-					ShotButton.this.player.fire(mEngine, mScene);
+					ShotButton.this.player.fire();
 					return true;
 				default:
 					return true;
