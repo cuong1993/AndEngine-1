@@ -19,9 +19,9 @@ public interface GameConstants {
 	//=========================================================//
 	public static final int LAYER_COUNT = 10;
 	public static final int LAYER_BACKGROUND = 0;
-	public static final int LAYER_INI = LAYER_BACKGROUND + 1;
-	public static final int LAYER_ROCK = LAYER_INI + 1;
-	public static final int LAYER_TANK = LAYER_ROCK + 1;
+	public static final int LAYER_ROCK = LAYER_BACKGROUND + 1;
+	public static final int LAYER_INI = LAYER_ROCK + 1;
+	public static final int LAYER_TANK = LAYER_INI + 1;
 	public static final int LAYER_BUSH = LAYER_TANK + 1;
 	//=========================================================//
 	//			hằng số liên quan tới hướng
