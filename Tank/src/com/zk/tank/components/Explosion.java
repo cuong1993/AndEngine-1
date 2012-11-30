@@ -34,7 +34,6 @@ public class Explosion implements GameConstants, IAndEngine {
 	private int tileY;
 
 	private TypeExplosion type;
-	private boolean used;
 
 	//=================================================================================//
 	//									 CONSTRUCTORS
@@ -42,7 +41,6 @@ public class Explosion implements GameConstants, IAndEngine {
 	
 	public Explosion(TypeExplosion type) {
 		this.type = type;
-		this.used = false;
 	}
 
 	//=================================================================================//
@@ -102,41 +100,33 @@ public class Explosion implements GameConstants, IAndEngine {
 	 * @param mScene {@link Scene} sử dụng dể dựng hình ảnh lên
 	 */
 	public void perform(float pX, float pY) {
+		
 		this.mSprite.setPosition(pX, pY);
 		this.mSprite.setVisible(true);
-		this.used = true;
 		this.mSprite.animate(24, false, new AnimatedSprite.IAnimationListener() {
 			
 			@Override
-			public void onAnimationStarted(AnimatedSprite arg0, int arg1) {
-				// TODO Auto-generated method stub
-				
+			public void onAnimationStarted(AnimatedSprite pAnimatedSprite, int pInitialLoopCount) {
+				// NOTHING
 			}
 			
 			@Override
-			public void onAnimationLoopFinished(AnimatedSprite arg0, int arg1, int arg2) {
-				// TODO Auto-generated method stub
-				
+			public void onAnimationLoopFinished(AnimatedSprite pAnimatedSprite, int pOldFrameIndex, int pNewFrameIndex) {
+				// NOTHING
 			}
 			
 			@Override
-			public void onAnimationFrameChanged(AnimatedSprite arg0, int arg1, int arg2) {
-				// TODO Auto-generated method stub
-				
+			public void onAnimationFrameChanged(AnimatedSprite pAnimatedSprite, int pRemainingLoopCount, int pInitialLoopCount) {
+				// NOTHING
 			}
 			
 			@Override
-			public void onAnimationFinished(AnimatedSprite arg0) {
-				Explosion.this.used = false;
+			public void onAnimationFinished(AnimatedSprite pAnimatedSprite) {
 				Explosion.this.mSprite.setVisible(false);
 			}
 		});
 	}
 	
-	public boolean isUsed() {
-		return this.used;
-	}
-
 	//=================================================================================//
 	//									GETTER & SETTER
 	//=================================================================================//
