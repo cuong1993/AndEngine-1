@@ -169,10 +169,9 @@ public class OnGameScreen extends SimpleBaseGameActivity implements GameConstant
 					direction = NONE;					
 				}
 
-				OnGameScreen.this.mPlayer.keepMoving(direction, timeTouchController);
 				// Di chuyển đối tượng theo hướng của cần điều khiển
-//				OnGameScreen.this.mPlayer.setmDirection(direction);
-//				OnGameScreen.this.mPlayer.move();
+				OnGameScreen.this.mPlayer.keepMoving(direction, OnGameScreen.this.timeTouchController);
+
 			}
 		});
 
