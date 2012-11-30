@@ -34,11 +34,11 @@ public class Bullet implements GameConstants, IAndEngine {
 	private Sprite mSprite;
 	
 	private Explosion mExplosion;
+	private Explosion mFiredExplosion;
 	
 	private int lvl;
 	private float speed;
-	private boolean used;
-
+	
 	//=================================================================================//
 	//									  CONSTRUCTORS
 	//=================================================================================//
@@ -46,8 +46,8 @@ public class Bullet implements GameConstants, IAndEngine {
 	public Bullet(int lvl, float speed) {
 		this.lvl = lvl;
 		this.speed = speed;
-		this.used = false;
-		mExplosion = new Explosion(TypeExplosion.BULLET_EXPLOSION);
+		this.mExplosion = new Explosion(TypeExplosion.BULLET_EXPLOSION);
+		this.mFiredExplosion = new Explosion(TypeExplosion.FIRED_EXPLOSION);
 	}
 
 	//=================================================================================//
@@ -62,6 +62,7 @@ public class Bullet implements GameConstants, IAndEngine {
 		mAtlas.load();
 		
 		this.mExplosion.onCreateResource(mEngine, context);
+		this.mFiredExplosion.onCreateResource(mEngine, context);
 	}
 
 	@Override
@@ -71,21 +72,21 @@ public class Bullet implements GameConstants, IAndEngine {
 		mScene.attachChild(mSprite);
 		
 		this.mExplosion.onCreateScene(mEngine, mScene);
+		this.mFiredExplosion.onCreateScene(mEngine, mScene);
 	}
 
 	/**
-	 * @param direction
-	 * @param pX
-	 * @param pY
-	 * @param mEngine
-	 * @param mScene
+	 * Phương thức mô tả cách thức di chuyển của đối tượng
+	 * 
+	 * @param direction Hướng di chuyển của đối tượng
+	 * @param pX Tọa độ X của Tiled tiếp sau theo hướng di chuyển
+	 * @param pY Tọa độ Y của Tiled tiếp sau theo hướng di chuyển
+	 * @param mEngine {@link Engine} sử dụng trong Game
 	 */
-	public void move(final int direction, final float pX, final float pY, final Engine mEngine, final Scene mScene) {
+	public void move(final int direction, final float pX, final float pY, final Engine mEngine) {
 		
 		this.mSprite.setPosition(pX, pY);
 		this.mSprite.setVisible(true);
-		
-		this.used = true;
 		
 		this.mSprite.registerUpdateHandler(new TimerHandler(this.speed, new ITimerCallback() {
 			
@@ -101,11 +102,13 @@ public class Bullet implements GameConstants, IAndEngine {
 				// hướng lên trên
 				case UP:
 					Bullet.this.mSprite.setRotation(UP);
+		
+					Bullet.this.mFiredExplosion.perform(pX, pY + TILED_HEIGHT / 2);
+		
 					// kiểm tra tính va chạm và vượt khỏi bản đồ
 					// nếu vi phạm, hiển thị chuỗi hình ảnh nổ
 					if (Bullet.this.mSprite.getY() - 8 <= 0 || isCollision) {
-						Bullet.this.used = false;
-						Bullet.this.mExplosion.perform(pX, pY);
+						Bullet.this.mExplosion.perform(Bullet.this.mSprite.getX(), Bullet.this.mSprite.getY());
 						return;
 						}
 					else
@@ -114,10 +117,13 @@ public class Bullet implements GameConstants, IAndEngine {
 					break;
 				case RIGHT:
 					Bullet.this.mSprite.setRotation(RIGHT);
+		
+					Bullet.this.mFiredExplosion.perform(pX - TILED_WIDTH / 2, pY);
+		
 					// kiểm tra tính va chạm và vượt khỏi bản đồ
 					// nếu vi phạm, hiển thị chuỗi hình ảnh nổ
 					if (Bullet.this.mSprite.getX() + TILED_HEIGHT >= 768 || isCollision) {
-						Bullet.this.used = false;
+						Bullet.this.mExplosion.perform(Bullet.this.mSprite.getX(), Bullet.this.mSprite.getY());
 						return;
 					}
 					else
@@ -126,10 +132,13 @@ public class Bullet implements GameConstants, IAndEngine {
 					break;
 				case DOWN:
 					Bullet.this.mSprite.setRotation(DOWN);
+		
+					Bullet.this.mFiredExplosion.perform(pX, pY - TILED_HEIGHT / 2);
+		
 					// kiểm tra tính va chạm và vượt khỏi bản đồ
 					// nếu vi phạm, hiển thị chuỗi hình ảnh nổ
 					if (Bullet.this.mSprite.getY() - 8  + TILED_HEIGHT >= 480 || isCollision) {
-						Bullet.this.used = false;
+						Bullet.this.mExplosion.perform(Bullet.this.mSprite.getX(), Bullet.this.mSprite.getY());
 						return;
 					}
 					else
@@ -138,10 +147,13 @@ public class Bullet implements GameConstants, IAndEngine {
 					break;
 				case LEFT:
 					Bullet.this.mSprite.setRotation(LEFT);
+		
+					Bullet.this.mFiredExplosion.perform(pX + TILED_WIDTH / 2, pY);
+		
 					// kiểm tra tính va chạm và vượt khỏi bản đồ
 					// nếu vi phạm, hiển thị chuỗi hình ảnh nổ
 					if (Bullet.this.mSprite.getX() <= 48 || isCollision) {
-						Bullet.this.used = false;
+						Bullet.this.mExplosion.perform(Bullet.this.mSprite.getX(), Bullet.this.mSprite.getY());
 						return;
 					}
 					else
@@ -157,10 +169,6 @@ public class Bullet implements GameConstants, IAndEngine {
 
 	public void setPoisition(float pX, float pY) {
 		this.mSprite.setPosition(pX, pY);
-	}
-	
-	public boolean isUsed() {
-		return this.used;
 	}
 
 	//=================================================================================//
