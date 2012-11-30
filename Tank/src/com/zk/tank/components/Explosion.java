@@ -86,7 +86,7 @@ public class Explosion implements GameConstants, IAndEngine {
 	public void onCreateScene(Engine mEngine, Scene mScene) {
 
 		this.mSprite = new AnimatedSprite(0, 0, mRegion, mEngine.getVertexBufferObjectManager());
-		this.mSprite.setScale(1.0f);
+		this.mSprite.setScale(1.5f);
 		this.mSprite.setVisible(false);
 		mScene.getChildByIndex(LAYER_TANK).attachChild(this.mSprite);
 	}
@@ -94,13 +94,15 @@ public class Explosion implements GameConstants, IAndEngine {
 	/**
 	 * Phương thức mô tả vụ nổ bằng hình ảnh
 	 * 
+	 * @param direction Hướng hiện tại của thực thể
 	 * @param type kiểu {@link TypeExplosion} mà vụ nổ mô tả 
 	 * @param pX Tọa độ X của vị trí cần mô tả
 	 * @param pY Tọa độ Y của vị trí cần mô tả
 	 * @param mScene {@link Scene} sử dụng dể dựng hình ảnh lên
 	 */
-	public void perform(float pX, float pY) {
+	public void perform(int direction, float pX, float pY) {
 		
+		this.mSprite.setRotation(direction);
 		this.mSprite.setPosition(pX, pY);
 		this.mSprite.setVisible(true);
 		this.mSprite.animate(24, false, new AnimatedSprite.IAnimationListener() {
@@ -120,8 +122,11 @@ public class Explosion implements GameConstants, IAndEngine {
 				// NOTHING
 			}
 			
+			// Xử lý khi hoàn thành mô tả
 			@Override
 			public void onAnimationFinished(AnimatedSprite pAnimatedSprite) {
+				
+				// ẩn hình ảnh
 				Explosion.this.mSprite.setVisible(false);
 			}
 		});
