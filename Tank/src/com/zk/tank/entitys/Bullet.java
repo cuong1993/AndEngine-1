@@ -29,6 +29,7 @@ public class Bullet implements GameConstants, IAndEngine {
 	//=================================================================================//
 	//										FIELDS
 	//=================================================================================//
+	
 	private BitmapTextureAtlas mAtlas;
 	private TextureRegion mRegion;
 	private Sprite mSprite;
@@ -38,6 +39,7 @@ public class Bullet implements GameConstants, IAndEngine {
 	
 	private int lvl;
 	private float speed;
+	private boolean used;
 	
 	//=================================================================================//
 	//									  CONSTRUCTORS
@@ -48,6 +50,7 @@ public class Bullet implements GameConstants, IAndEngine {
 		this.speed = speed;
 		this.mExplosion = new Explosion(TypeExplosion.BULLET_EXPLOSION);
 		this.mFiredExplosion = new Explosion(TypeExplosion.FIRED_EXPLOSION);
+		this.used = false;
 	}
 
 	//=================================================================================//
@@ -57,7 +60,7 @@ public class Bullet implements GameConstants, IAndEngine {
 	@Override
 	public void onCreateResource(Engine mEngine, Context context) {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath(ASSET_GRAPHICS);
-		mAtlas = new BitmapTextureAtlas(mEngine.getTextureManager(), 5, 24);
+		mAtlas = new BitmapTextureAtlas(mEngine.getTextureManager(), 9, 20);
 		mRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlas, context, "bullet.png", 0, 0);
 		mAtlas.load();
 		
@@ -68,8 +71,9 @@ public class Bullet implements GameConstants, IAndEngine {
 	@Override
 	public void onCreateScene(Engine mEngine, Scene mScene) {
 		mSprite = new Sprite(0, 0, mRegion, mEngine.getVertexBufferObjectManager());
+		mSprite.setScale(1.5f);
 		mSprite.setVisible(false);
-		mScene.attachChild(mSprite);
+		mScene.getChildByIndex(LAYER_INI).attachChild(mSprite);
 		
 		this.mExplosion.onCreateScene(mEngine, mScene);
 		this.mFiredExplosion.onCreateScene(mEngine, mScene);
@@ -85,10 +89,18 @@ public class Bullet implements GameConstants, IAndEngine {
 	 */
 	public void move(final int direction, final float pX, final float pY, final Engine mEngine) {
 		
-		this.mSprite.setPosition(pX, pY);
+		// đặt đối tượng trong trạng thái đang được sử dụng
+		this.used = true;
+		
+		// Cho phép hiển thị vụ nổ đạn bay khỏi nòng súng
+		// và thay đổi điểm bắt đầu của viên đạn tương ứng với hướng hiện tại
+		this.showFiredExplosion(direction, pX, pY);
+		
+		// Cho hình ảnh đối tượng hiển thị lên màn hình
 		this.mSprite.setVisible(true);
 		
-		this.mSprite.registerUpdateHandler(new TimerHandler(this.speed, new ITimerCallback() {
+		// đăng ký update dữ liệu cho đối tượng theo thời gian, với chu kỳ xác định bằng thuộc tính speed
+		this.mSprite.registerUpdateHandler(new TimerHandler(this.speed, true, new ITimerCallback() {
 			
 			@Override
 			public void onTimePassed(TimerHandler pTimerHandler) {
@@ -101,74 +113,198 @@ public class Bullet implements GameConstants, IAndEngine {
 
 				// hướng lên trên
 				case UP:
+					
+					// Xoay viên đạn theo hướng lên trên
 					Bullet.this.mSprite.setRotation(UP);
 		
-					Bullet.this.mFiredExplosion.perform(pX, pY + TILED_HEIGHT / 2);
-		
 					// kiểm tra tính va chạm và vượt khỏi bản đồ
-					// nếu vi phạm, hiển thị chuỗi hình ảnh nổ
 					if (Bullet.this.mSprite.getY() - 8 <= 0 || isCollision) {
-						Bullet.this.mExplosion.perform(Bullet.this.mSprite.getX(), Bullet.this.mSprite.getY());
+						
+						// Hiển thị chuỗi hình ảnh mô tả vụ nổ giữa Bullet với vật cản
+						Bullet.this.mExplosion.perform(direction, Bullet.this.mSprite.getX() - 12, Bullet.this.mSprite.getY() - 24);
+						
+						// ẩn đối tượng trên màn hình
+						Bullet.this.mSprite.setVisible(false);
+						
+						// Bỏ đăng ký update dữ liệu theo chu kỳ thời gian
+						Bullet.this.mSprite.unregisterUpdateHandler(pTimerHandler);
+
+						// đặt đối tượng về trạng thái chưa được sử dụng
+						Bullet.this.used = false;
+						
+						// thoát khỏi hàm
 						return;
-						}
+					}
+					
 					else
 						// Di chuyển theo bước 4px
 						Bullet.this.mSprite.setPosition(Bullet.this.mSprite.getX(), Bullet.this.mSprite.getY() - SPEED_STEP);
 					break;
+					
+				// Hướng sang phải
 				case RIGHT:
+					
+					// Xoay viên đạn sang hướng bên phải
 					Bullet.this.mSprite.setRotation(RIGHT);
 		
-					Bullet.this.mFiredExplosion.perform(pX - TILED_WIDTH / 2, pY);
-		
 					// kiểm tra tính va chạm và vượt khỏi bản đồ
-					// nếu vi phạm, hiển thị chuỗi hình ảnh nổ
-					if (Bullet.this.mSprite.getX() + TILED_HEIGHT >= 768 || isCollision) {
-						Bullet.this.mExplosion.perform(Bullet.this.mSprite.getX(), Bullet.this.mSprite.getY());
+					if (Bullet.this.mSprite.getX() + TILED_HEIGHT >= 800 || isCollision) {
+
+						// Hiển thị chuỗi hình ảnh mô tả vụ nổ giữa Bullet với vật cản
+						Bullet.this.mExplosion.perform(direction, Bullet.this.mSprite.getX() - 8, Bullet.this.mSprite.getY() - 8);
+						
+						// ẩn đối tượng trên màn hình
+						Bullet.this.mSprite.setVisible(false);
+						
+						// Bỏ đăng ký update dữ liệu theo chu kỳ thời gian
+						Bullet.this.mSprite.unregisterUpdateHandler(pTimerHandler);
+
+						// đặt đối tượng về trạng thái chưa được sử dụng
+						Bullet.this.used = false;
+
+						// thoát khỏi hàm
 						return;
-					}
+					} 
+					
 					else
 						// Di chuyển theo bước 4px
 						Bullet.this.mSprite.setPosition(Bullet.this.mSprite.getX() + SPEED_STEP, Bullet.this.mSprite.getY());
 					break;
+					
+				// Hướng xuống dưới
 				case DOWN:
+					
+					// Xoay viên đạn hướng xuống dưới
 					Bullet.this.mSprite.setRotation(DOWN);
-		
-					Bullet.this.mFiredExplosion.perform(pX, pY - TILED_HEIGHT / 2);
-		
+					
 					// kiểm tra tính va chạm và vượt khỏi bản đồ
-					// nếu vi phạm, hiển thị chuỗi hình ảnh nổ
-					if (Bullet.this.mSprite.getY() - 8  + TILED_HEIGHT >= 480 || isCollision) {
-						Bullet.this.mExplosion.perform(Bullet.this.mSprite.getX(), Bullet.this.mSprite.getY());
+					if (Bullet.this.mSprite.getY() - 8  + TILED_HEIGHT >= 504 || isCollision) {
+
+						// Hiển thị chuỗi hình ảnh mô tả vụ nổ giữa Bullet với vật cản
+						Bullet.this.mExplosion.perform(direction, Bullet.this.mSprite.getX() - 12, Bullet.this.mSprite.getY());
+						
+						// ẩn đối tượng trên màn hình
+						Bullet.this.mSprite.setVisible(false);
+						
+						// Bỏ đăng ký update dữ liệu theo chu kỳ thời gian
+						Bullet.this.mSprite.unregisterUpdateHandler(pTimerHandler);
+
+						// đặt đối tượng về trạng thái chưa được sử dụng
+						Bullet.this.used = false;
+
+						// thoát khỏi hàm
 						return;
 					}
+					
 					else
 						// Di chuyển theo bước 4px
 						Bullet.this.mSprite.setPosition(Bullet.this.mSprite.getX(), Bullet.this.mSprite.getY() + SPEED_STEP);
 					break;
+					
+				// Hướng sang trái
 				case LEFT:
+					
+					// xoay viên đạn hướng sang trái
 					Bullet.this.mSprite.setRotation(LEFT);
 		
-					Bullet.this.mFiredExplosion.perform(pX + TILED_WIDTH / 2, pY);
-		
 					// kiểm tra tính va chạm và vượt khỏi bản đồ
-					// nếu vi phạm, hiển thị chuỗi hình ảnh nổ
 					if (Bullet.this.mSprite.getX() <= 48 || isCollision) {
-						Bullet.this.mExplosion.perform(Bullet.this.mSprite.getX(), Bullet.this.mSprite.getY());
+
+						// Hiển thị chuỗi hình ảnh mô tả vụ nổ giữa Bullet với vật cản
+						Bullet.this.mExplosion.perform(direction, Bullet.this.mSprite.getX() - 24, Bullet.this.mSprite.getY() - 8);
+						
+						// ẩn đối tượng trên màn hình
+						Bullet.this.mSprite.setVisible(false);
+						
+						// Bỏ đăng ký update dữ liệu theo chu kỳ thời gian
+						Bullet.this.mSprite.unregisterUpdateHandler(pTimerHandler);
+
+						// thoát khỏi hàm
+						Bullet.this.used = false;
+
+						// thoát khỏi hàm
 						return;
 					}
+					
 					else
 						// Di chuyển theo bước 4px
 						Bullet.this.mSprite.setPosition(Bullet.this.mSprite.getX() - SPEED_STEP, Bullet.this.mSprite.getY());
 					break;
+					
 				default:
 					break;
 				}
 			}
 		}));
 	}
+	
+	/**
+	 * Phương thức mô tả cách hiển thị vụ nổ khi viên đạn bay khỏi nòng súng
+	 * và điều chỉnh vị trí xuất hiện ban đầu của viên đạn phù hợp với hướng
+	 * 
+	 * @param direction Hướng quay hiện tại
+	 * @param pX Tọa độ X của ô muốn hiển thị
+	 * @param pY Tọa độ Y của ô muốn hiển thị
+	 */
+	public void showFiredExplosion(int direction, float pX, float pY) {
 
-	public void setPoisition(float pX, float pY) {
-		this.mSprite.setPosition(pX, pY);
+		// Xử lý di chuyển với các hướng tương ứng
+		switch (direction) {
+
+		// hướng lên trên
+		case UP:
+			
+			// điều chỉnh lại tọa độ ban đầu của viên đạn
+			this.mSprite.setPosition(pX + 12, pY + 40);
+			
+			// Thể hiện vụ nổ của đạn bay khỏi nòng súng
+			this.mFiredExplosion.perform(direction, pX, pY + TILED_HEIGHT / 2);
+			
+			// thoát khỏi phương thức
+			return;
+			
+		case RIGHT:
+
+			// điều chỉnh lại tọa độ ban đầu của viên đạn
+			this.mSprite.setPosition(pX - 40, pY + 6);
+			
+			// Thể hiện vụ nổ của đạn bay khỏi nòng súng
+			this.mFiredExplosion.perform(direction, pX - TILED_WIDTH / 2, pY);
+			
+			// thoát khỏi phương thức
+			return;
+			
+		case DOWN:
+
+			// điều chỉnh lại tọa độ ban đầu của viên đạn
+			this.mSprite.setPosition(pX + 12, pY - 40);
+			
+			// Thể hiện vụ nổ của đạn bay khỏi nòng súng
+			this.mFiredExplosion.perform(direction, pX, pY - TILED_HEIGHT / 2);
+			
+			// thoát khỏi phương thức
+			return;
+			
+		case LEFT:
+
+			// điều chỉnh lại tọa độ ban đầu của viên đạn
+			this.mSprite.setPosition(pX + 40, pY + 6);
+			
+			// Thể hiện vụ nổ của đạn bay khỏi nòng súng
+			this.mFiredExplosion.perform(direction, pX + TILED_WIDTH / 2, pY);
+			
+			// thoát khỏi phương thức
+			return;
+		}
+	}
+	
+	/**
+	 * Phương thức hỏi đáp trạng thái sử dụng của đối tượng
+	 * 
+	 * @return nếu đối tượng đang được sử dung (true), ngược lại (false)
+	 */
+	public boolean isUsed() {
+		return this.used;
 	}
 
 	//=================================================================================//
