@@ -29,6 +29,7 @@ public abstract class Tank implements GameConstants, IAndEngine {
 	//										FIELDS
 	//=================================================================================//
 	protected Engine mEngine;
+	
 	protected BitmapTextureAtlas mAtlas;
 	protected TextureRegion mRegion;
 	protected Sprite mSprite;
@@ -74,7 +75,7 @@ public abstract class Tank implements GameConstants, IAndEngine {
 		this.tiledX = tiledX + 1;
 		this.tiledY = tiledY;
 		this.mDirection = direction;
-		this.mBullet = new Bullet(1, SPEED_MEDIUM);
+		this.mBullet = new Bullet(1, SPEED_FAST);
 		this.mExplosion = new Explosion(Explosion.TypeExplosion.TANK_EXPLOSION);
 		this.bullets = 2;
 		this.speed = speed;
@@ -92,12 +93,15 @@ public abstract class Tank implements GameConstants, IAndEngine {
 	 */
 	@Override
 	public void onCreateResource(Engine mEngine, Context context) {
+		
+		this.mEngine = mEngine;
+		
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath(ASSET_GRAPHICS);
 		this.mAtlas = new BitmapTextureAtlas(mEngine.getTextureManager(), 32, 32);
 		this.mRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlas, context, "tank_player.png", 0, 0);
 		this.mAtlas.load();
 		
-		this.mEngine = mEngine;
+		this.mBullet.onCreateResource(mEngine, context);
 	}
 	
 	/**
@@ -108,9 +112,11 @@ public abstract class Tank implements GameConstants, IAndEngine {
 	 */
 	@Override
 	public void onCreateScene(Engine mEngine, Scene mScene) {
+		
 		this.mSprite = new Sprite(this.tiledX * TILED_WIDTH, this.tiledY * TILED_WIDTH + 8, this.mRegion, mEngine.getVertexBufferObjectManager());
 		this.mSprite.setScale(1.5f);
 		mScene.getChildByIndex(LAYER_TANK).attachChild(mSprite);
+		this.mBullet.onCreateScene(mEngine, mScene);
 	}
 	
 	/**
@@ -119,6 +125,7 @@ public abstract class Tank implements GameConstants, IAndEngine {
 	 * @param mEngine {@link Engine} được sử dụng trong game
 	 */
 	public void move() {
+		
 		this.mSprite.registerUpdateHandler(new TimerHandler(this.speed, new ITimerCallback() {
 			
 			@Override
@@ -178,38 +185,46 @@ public abstract class Tank implements GameConstants, IAndEngine {
 	 * Phương thức mô tả đối tượng ở trạng thái bắn
 	 */
 	public void fire() {
-		if (this.bullets == 0)
-			this.bullets = 2;
-		float pX = this.mSprite.getX();
-		float pY = this.mSprite.getY();
 		
-		// Tính toán lại tọa độ tương ứng với hướng của đối tượng
-		switch (this.cDirection) {
-		case UP:
-			pY -= TILED_HEIGHT;
-			break;
-		case RIGHT:
-			pX += TILED_HEIGHT;
-			break;
-		case DOWN:
-			pY += TILED_HEIGHT;
-			break;
-		case LEFT:
-			pX -= TILED_HEIGHT;
-			break;
-		default:
-			break;
+		// Nếu đối tượng Bullet không được sử dụng
+		if (!this.mBullet.isUsed()) {
+			
+			if (this.bullets == 0)
+				this.bullets = 2;
+			
+			// Lưu vị trí hiện tại của đối tượng Tank
+			float pX = this.mSprite.getX();
+			float pY = this.mSprite.getY();
+			
+			// Tính toán lại tọa độ tương ứng với hướng của đối tượng
+			switch (this.cDirection) {
+			case UP:
+				pY -= TILED_HEIGHT;
+				break;
+			case RIGHT:
+				pX += TILED_HEIGHT;
+				break;
+			case DOWN:
+				pY += TILED_HEIGHT;
+				break;
+			case LEFT:
+				pX -= TILED_HEIGHT;
+				break;
+			default:
+				break;
+			}
+			
+			// đặt lệnh cho đối tượng Bullet dựng hình và di chuyển trên màn hình
+			this.mBullet.move(this.cDirection, pX, pY, this.mEngine);
+			this.bullets--;
 		}
-		
-		this.mBullet.move(this.cDirection, pX, pY, this.mEngine);
-		this.bullets--;
 	}
 	
 	/**
 	 * Phương thức mô tả đối tượng ở trạng thái chết
 	 */
 	public void die() {
-		this.mExplosion.perform(this.mSprite.getX(), this.mSprite.getY());
+		this.mExplosion.perform(this.cDirection, this.mSprite.getX(), this.mSprite.getY());
 		this.mSprite.setVisible(false);
 	}
 	
@@ -224,13 +239,16 @@ public abstract class Tank implements GameConstants, IAndEngine {
 	public void keepMoving(int direction, float timeTouchController) {
 		if (timeTouchController >= SPEED_SLOW * 3) {
 			
-			if (((int) this.mSprite.getX() % 16 != 0 || ((int) this.mSprite.getY() - 8) % 16 != 0)
-					&& this.cDirection != direction && direction != NONE) {
+			int x = (int) (this.mSprite.getX() % 16);
+			int y = (int) ((this.mSprite.getY() - 8) % 16);
+			
+			if (this.cDirection != direction
+					&& (x  != 0 && y != 0)) {
 				
-				this.mDirection = this.cDirection;
+				this.setmDirection(direction);
 			} else {
 
-				this.mDirection = direction;
+				this.setmDirection(direction);
 			}
 		} else {
 			
