@@ -31,7 +31,8 @@ public class Collision implements GameConstants {
 	public static boolean isCollision(Engine mEngine, int direction, Sprite mSprite, ArrayList<Rectangle> rocks) {
 		
 		// Tạo 1 đối tượng Rectangle tạm thời từ Sprite nguôn để kiểm tra
-		Rectangle entity = new Rectangle(mSprite.getX(), mSprite.getY(), 46, 46, mEngine.getVertexBufferObjectManager());
+		Rectangle entity = new Rectangle(mSprite.getX(), mSprite.getY(), 
+				mSprite.getWidth() * 1.5f - 2, mSprite.getHeight() * 1.5f - 2, mEngine.getVertexBufferObjectManager());
 		
 		// Dịch chuyển đối tượng Rectangle tạm theo hướng đưa vào
 		switch (direction) {
@@ -75,7 +76,8 @@ public class Collision implements GameConstants {
 	public static boolean isCollision(Engine mEngine, int direction, Sprite mSprite, Sprite pSprite) {
 
 		// Tạo 1 đối tượng Rectangle tạm thời từ Sprite nguôn để kiểm tra
-		Rectangle entity = new Rectangle(mSprite.getX(), mSprite.getY(), TILED_WIDTH, TILED_HEIGHT, mEngine.getVertexBufferObjectManager());
+		Rectangle entity = new Rectangle(mSprite.getX(), mSprite.getY(), 
+				mSprite.getWidth() - 2, mSprite.getHeight() - 2, mEngine.getVertexBufferObjectManager());
 
 		// Dịch chuyển đối tượng Sprite tạm theo hướng đưa vào
 		switch (direction) {
