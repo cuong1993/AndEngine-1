@@ -9,6 +9,7 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import org.andengine.opengl.texture.region.TextureRegion;
 
 import android.content.Context;
+import android.opengl.GLES20;
 
 import com.zk.tank.constant.GameConstants;
 import com.zk.tank.entitys.Player;
@@ -65,13 +66,26 @@ public class ShotButton implements GameConstants, IAndEngine {
 				
 				// Đưa đối tượng Player vào trạng thái bắn nếu chạm xuống hoặc di chuyển trên đối tượng
 				case TouchEvent.ACTION_DOWN:
+					
 					ShotButton.this.player.fire();
+					ShotButton.this.mSprite.setAlpha(1.0f);
 					return true;
+					
+				case TouchEvent.ACTION_MOVE:
+
+					ShotButton.this.mSprite.setAlpha(1.0f);
+					return true;
+					
 				default:
+					
+					ShotButton.this.mSprite.setAlpha(0.5f);
 					return true;
 				}
 			}
 		};
+		
+		this.mSprite.setBlendFunction(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+		this.mSprite.setAlpha(0.5f);
 		
 		mScene.registerTouchArea(mSprite);
 		mScene.attachChild(mSprite);
