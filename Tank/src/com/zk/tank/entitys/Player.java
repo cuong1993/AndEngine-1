@@ -23,7 +23,7 @@ public class Player extends Tank {
 	 * @param tiledX Vị trí ô theo chiều ngang ban đầu muốn dựng 
 	 * @param tiledY Vị trí ô theo chiều dọc ban đầu muốn dựng
 	 * @param direction Hướng ban đầu của đối tượng (lấy từ interface {@link GameConstants}
-	 * @param playerID ID của người chơi (1: chủ phòng, 2..4L khách)
+	 * @param playerID ID của người chơi (1: chủ phòng, 2... 4: khách)
 	 */
 	public Player(int playerID, int tiledX, int tiledY, int direction) {
 		this(playerID, tiledX, tiledY, direction, SPEED_FAST);
