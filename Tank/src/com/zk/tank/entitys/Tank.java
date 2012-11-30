@@ -46,7 +46,6 @@ public abstract class Tank implements GameConstants, IAndEngine {
 	protected int bullets;
 	protected float shotSpeed;
 	
-	protected Explosion mFiredExplosion;
 	protected Explosion mExplosion;
 
 	//=================================================================================//
@@ -76,7 +75,6 @@ public abstract class Tank implements GameConstants, IAndEngine {
 		this.tiledY = tiledY;
 		this.mDirection = direction;
 		this.mBullet = new Bullet(1, SPEED_MEDIUM);
-		this.mFiredExplosion = new Explosion(Explosion.TypeExplosion.FIRED_EXPLOSION);
 		this.mExplosion = new Explosion(Explosion.TypeExplosion.TANK_EXPLOSION);
 		this.bullets = 2;
 		this.speed = speed;
@@ -100,8 +98,6 @@ public abstract class Tank implements GameConstants, IAndEngine {
 		this.mAtlas.load();
 		
 		this.mEngine = mEngine;
-		
-		this.mFiredExplosion.onCreateResource(mEngine, context);
 	}
 	
 	/**
@@ -115,8 +111,6 @@ public abstract class Tank implements GameConstants, IAndEngine {
 		this.mSprite = new Sprite(this.tiledX * TILED_WIDTH, this.tiledY * TILED_WIDTH + 8, this.mRegion, mEngine.getVertexBufferObjectManager());
 		this.mSprite.setScale(1.5f);
 		mScene.getChildByIndex(LAYER_TANK).attachChild(mSprite);
-		
-		this.mFiredExplosion.onCreateScene(mEngine, mScene);
 	}
 	
 	/**
@@ -192,23 +186,22 @@ public abstract class Tank implements GameConstants, IAndEngine {
 		// Tính toán lại tọa độ tương ứng với hướng của đối tượng
 		switch (this.cDirection) {
 		case UP:
-			pY -= TILED_HEIGHT / 2;
+			pY -= TILED_HEIGHT;
 			break;
 		case RIGHT:
-			pX += TILED_HEIGHT / 2;
+			pX += TILED_HEIGHT;
 			break;
 		case DOWN:
-			pY += TILED_HEIGHT / 2;
+			pY += TILED_HEIGHT;
 			break;
 		case LEFT:
-			pX -= TILED_HEIGHT / 2;
+			pX -= TILED_HEIGHT;
 			break;
 		default:
 			break;
 		}
 		
-		// Tạo chuỗi hình ảnh đạn bắn khỏi nòng pháo
-		this.mFiredExplosion.perform(pX, pY);
+		this.mBullet.move(this.cDirection, pX, pY, this.mEngine);
 		this.bullets--;
 	}
 	
@@ -222,25 +215,29 @@ public abstract class Tank implements GameConstants, IAndEngine {
 	
 	/**
 	 * Phương thức xử lý đối tượng khi chuyển hướng mà chưa vào vị trí có thể đổi
-	 * thì tiếp tục di chuyển theo hướng cũ cho tới khi tới tọa độ thích hợp
+	 * thì tiếp tục di chuyển theo hướng cũ cho tới khi tới tọa độ thích hợp.
+	 * Nếu chỉ chạm vào cần điều khiển thì chuyển hướng, không di chuyển
+	 * 
+	 * @param direction hướng muốn thay đổi
+	 * @param timeTouchController tổng thời gian chạm vào cần điều khiển
 	 */
 	public void keepMoving(int direction, float timeTouchController) {
 		if (timeTouchController >= SPEED_SLOW * 3) {
 			
 			if (((int) this.mSprite.getX() % 16 != 0 || ((int) this.mSprite.getY() - 8) % 16 != 0)
-					&& this.cDirection != direction) {
+					&& this.cDirection != direction && direction != NONE) {
 				
 				this.mDirection = this.cDirection;
-				move();
 			} else {
 
 				this.mDirection = direction;
-				move();
 			}
 		} else {
 			
 			this.mDirection = direction;
 		}
+		
+		this.move();
 	}
 	
 	/**
